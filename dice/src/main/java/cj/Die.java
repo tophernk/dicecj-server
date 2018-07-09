@@ -14,6 +14,10 @@ public class Die {
         value = NUMBER_GENERATOR.nextInt(6) + 1;
     }
 
+    public void setValue(int value) {
+        this.value = value;
+    }
+
     public int getValue() {
         return value;
     }
