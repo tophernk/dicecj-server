@@ -6,19 +6,16 @@ import java.util.List;
 public class Straight extends Score {
 
     private int requiredLength;
-    private int value;
-    private String name;
 
     public Straight(int length, int value, String name) {
+        super(name, value);
         this.requiredLength = length;
-        this.value = value;
-        this.name = name;
     }
 
     @Override
     public int evaluate(List<Die> dice) {
         dice.sort(Comparator.comparingInt(Die::getValue));
-        return determineStraightLength(dice) >= requiredLength ? value : 0;
+        return determineStraightLength(dice) >= requiredLength ? getValue() : 0;
     }
 
     private int determineStraightLength(List<Die> dice) {
@@ -29,11 +26,6 @@ public class Straight extends Score {
             }
         }
         return straightLength;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     private boolean isNextValueStraightValue(List<Die> dice, int i) {

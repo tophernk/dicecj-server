@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 public class FullHouse extends Score {
+
+    public FullHouse() {
+        super("Full House");
+    }
+
     @Override
     public int evaluate(List<Die> dice) {
         Map<Integer, Integer> dieCount = countDiceValues(dice);
@@ -28,8 +33,4 @@ public class FullHouse extends Score {
         }
     }
 
-    @Override
-    public String getName() {
-        return "Full House";
-    }
 }

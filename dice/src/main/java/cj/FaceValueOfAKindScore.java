@@ -5,11 +5,10 @@ import java.util.List;
 public class FaceValueOfAKindScore extends Score {
 
     private int faceValue;
-    private String name;
 
     public FaceValueOfAKindScore(int faceValue, String name) {
+        super(name);
         this.faceValue = faceValue;
-        this.name = name;
     }
 
     @Override
@@ -18,11 +17,6 @@ public class FaceValueOfAKindScore extends Score {
             return Util.sumValue(dice, faceValue);
         }
         return 0;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
 }

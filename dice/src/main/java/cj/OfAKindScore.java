@@ -5,11 +5,10 @@ import java.util.List;
 public class OfAKindScore extends Score {
 
     private int count;
-    private String name;
 
     public OfAKindScore(int count, String name) {
+        super(name);
         this.count = count;
-        this.name = name;
     }
 
     @Override
@@ -20,11 +19,6 @@ public class OfAKindScore extends Score {
             }
         }
         return 0;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     private long count(List<Die> dice, int value) {
