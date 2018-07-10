@@ -17,9 +17,11 @@ public class Scoreboard {
         scoreList.add(new FaceValueOfAKindScore(6, "Sixes"));
         scoreList.add(new OfAKindScore(3, "Three of a kind"));
         scoreList.add(new OfAKindScore(4, "Four of a kind"));
+        scoreList.add(new FullHouse());
         scoreList.add(new Straight(4, 30, "Small Straight"));
         scoreList.add(new Straight(5, 40, "Big Straight"));
         scoreList.add(new OfAKindScore(5, "Five of a kind"));
+        scoreList.add(new Chance());
     }
 
     public void evaluate(List<Die> dice) {
