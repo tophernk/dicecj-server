@@ -15,7 +15,7 @@ public class Straight extends Score {
     @Override
     public int evaluate(List<Die> dice) {
         dice.sort(Comparator.comparingInt(Die::getValue));
-        return determineStraightLength(dice) >= requiredLength ? getValue() : 0;
+        return determineStraightLength(dice) >= requiredLength ? getFixedValue() : 0;
     }
 
     private int determineStraightLength(List<Die> dice) {

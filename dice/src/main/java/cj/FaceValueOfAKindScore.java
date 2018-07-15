@@ -19,4 +19,7 @@ public class FaceValueOfAKindScore extends Score {
         return 0;
     }
 
+    public int getFaceValue() {
+        return faceValue;
+    }
 }

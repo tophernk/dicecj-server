@@ -5,7 +5,7 @@ import java.util.List;
 public abstract class Score {
 
     private String name;
-    private int value;
+    private int fixedValue;
 
     public Score(String name) {
         this.name = name;
@@ -13,7 +13,7 @@ public abstract class Score {
 
     public Score(String name, int value) {
         this.name = name;
-        this.value = value;
+        this.fixedValue = value;
     }
 
     public String getName() {
@@ -24,12 +24,8 @@ public abstract class Score {
         this.name = name;
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
+    public int getFixedValue() {
+        return fixedValue;
     }
 
     public abstract int evaluate(List<Die> dice);
