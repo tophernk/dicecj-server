@@ -13,10 +13,7 @@ public class FaceValueOfAKindScore extends Score {
 
     @Override
     public int evaluate(List<Die> dice) {
-        if(dice.stream().filter(d -> d.getValue() == faceValue).count() > 2) {
-            return Util.sumValue(dice, faceValue);
-        }
-        return 0;
+        return Util.sumValue(dice, faceValue);
     }
 
     public int getFaceValue() {

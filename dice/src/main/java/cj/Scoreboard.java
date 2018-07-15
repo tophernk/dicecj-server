@@ -20,7 +20,7 @@ public class Scoreboard {
         scoreList.put(new FullHouse(), null);
         scoreList.put(new Straight(4, 30, "Small Straight"), null);
         scoreList.put(new Straight(5, 40, "Big Straight"), null);
-        scoreList.put(new OfAKindScore(5, "Five of a kind"), null);
+        scoreList.put(new OfAKindScore(5, 50, "Five of a kind"), null);
         scoreList.put(new Chance(), null);
     }
 
@@ -31,12 +31,11 @@ public class Scoreboard {
                 .append(": ")
                 .append(v)
                 .append("\n"));
-        result.append("Bonus: ")
+        result.append("---------\nBonus: ")
                 .append(calculateBonus())
-                .append("\n")
+                .append("\n---------\n")
                 .append("Total: ")
-                .append(getTotal())
-                .append("\n");
+                .append(getTotal());
 
         return result.toString();
     }

@@ -11,11 +11,16 @@ public class OfAKindScore extends Score {
         this.count = count;
     }
 
+    public OfAKindScore(int count, int value, String name) {
+        super(name, value);
+        this.count = count;
+    }
+
     @Override
     public int evaluate(List<Die> dice) {
         for (Die die : dice) {
             if(count(dice, die.getValue()) >= count) {
-                return Util.sum(dice);
+                return getFixedValue() > 0 ? getFixedValue() : Util.sum(dice);
             }
         }
         return 0;
