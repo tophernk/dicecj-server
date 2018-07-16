@@ -9,4 +9,7 @@ public interface InputCommand {
     public boolean isTurnEndCommand();
 
     public boolean evaluate(String userInput);
+
+    public String retrieveInstructions();
+    
 }

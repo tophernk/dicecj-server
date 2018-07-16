@@ -65,7 +65,9 @@ public class Scoreboard {
     public int getTotal() {
         int total = 0;
         for (Integer value : scoreList.values()) {
-            total += value;
+            if (value != null) {
+                total += value;
+            }
         }
         return total + calculateBonus();
     }
@@ -76,7 +78,9 @@ public class Scoreboard {
         for (Score s : scoreList.keySet()) {
             if (s instanceof FaceValueOfAKindScore) {
                 requiredBonusValue += ((FaceValueOfAKindScore) s).getFaceValue() * 3;
-                upperTotal += scoreList.get(s);
+                if (scoreList.get(s) != null) {
+                    upperTotal += scoreList.get(s);
+                }
             }
         }
         return upperTotal >= requiredBonusValue ? BONUS_VALUE : 0;

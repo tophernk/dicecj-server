@@ -24,4 +24,9 @@ public class LockDiceCommand implements InputCommand {
         return userInput.equals("r")|| userInput.matches("[0-9]+");
     }
 
+    @Override
+    public String retrieveInstructions() {
+        return "die number(s) to lock di(c)e || r to reroll all dice";
+    }
+
 }
