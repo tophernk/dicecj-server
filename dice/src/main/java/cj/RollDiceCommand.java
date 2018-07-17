@@ -2,10 +2,15 @@ package cj;
 
 import java.util.List;
 
-public class ShowScoreboardCommand implements InputCommand {
+public class RollDiceCommand implements InputCommand {
+
+    private static final int ALLOWED_NUMBER_OF_ROLLS = 3;
+
     @Override
     public void execute(Player player, List<Die> dice, String userInput) {
-        System.out.println(player.getScoreboard());
+        dice.forEach(Die::roll);
+        dice.forEach(System.out::print);
+        System.out.println();
     }
 
     @Override
@@ -15,16 +20,16 @@ public class ShowScoreboardCommand implements InputCommand {
 
     @Override
     public boolean isExecutable(String userInput, int numberOfRolls) {
-        return userInput.equals("p");
+        return userInput.equals("r") && numberOfRolls < ALLOWED_NUMBER_OF_ROLLS;
     }
 
     @Override
     public String retrieveInstructions() {
-        return "p to print scoreboard";
+        return "r to roll dice";
     }
 
     @Override
     public boolean isRoll() {
-        return false;
+        return true;
     }
 }

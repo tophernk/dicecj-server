@@ -20,13 +20,18 @@ public class ChooseScoreCommand implements InputCommand {
     }
 
     @Override
-    public boolean evaluate(String userInput) {
+    public boolean isExecutable(String userInput, int numberOfRolls) {
         return userInput.equals("s");
     }
 
     @Override
     public String retrieveInstructions() {
         return "s to put score on scoreboard";
+    }
+
+    @Override
+    public boolean isRoll() {
+        return false;
     }
 
 }

@@ -8,8 +8,9 @@ public interface InputCommand {
 
     public boolean isTurnEndCommand();
 
-    public boolean evaluate(String userInput);
+    public boolean isExecutable(String userInput, int numberOfRolls);
 
     public String retrieveInstructions();
-    
+
+    public boolean isRoll();
 }

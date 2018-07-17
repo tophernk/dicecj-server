@@ -7,11 +7,19 @@ public class Die {
     private int value;
     private boolean locked;
 
+    public Die() {
+        value = randomDieNumber();
+    }
+
     public void roll() {
         if(isLocked()) {
             return;
         }
-        value = NUMBER_GENERATOR.nextInt(6) + 1;
+        value = randomDieNumber();
+    }
+
+    private int randomDieNumber() {
+        return NUMBER_GENERATOR.nextInt(6) + 1;
     }
 
     public void setValue(int value) {
@@ -32,5 +40,10 @@ public class Die {
 
     public void unlock() {
         this.locked = false;
+    }
+
+    @Override
+    public String toString() {
+        return isLocked() ? "[" + value + "]" : Integer.toString(value);
     }
 }

@@ -2,14 +2,7 @@ package cj;
 
 import java.util.List;
 
-public class Util {
-    public static void rollDice(List<Die> dice) {
-        dice.forEach(d -> {
-            d.roll();
-            System.out.print(d.getValue());
-        });
-        System.out.println();
-    }
+public class DiceUtil {
 
     public static int sum(List<Die> dice) {
         return sumValue(dice, null);

@@ -20,7 +20,7 @@ public class OfAKindScore extends Score {
     public int evaluate(List<Die> dice) {
         for (Die die : dice) {
             if(count(dice, die.getValue()) >= count) {
-                return getFixedValue() > 0 ? getFixedValue() : Util.sum(dice);
+                return getFixedValue() > 0 ? getFixedValue() : DiceUtil.sum(dice);
             }
         }
         return 0;

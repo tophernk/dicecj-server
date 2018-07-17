@@ -7,7 +7,14 @@ import java.util.*;
  */
 public class App {
     private static final int NUMBER_OF_DICE = 5;
-    private static final int NUMBER_OF_ROLLS = 3;
+    private static final List<InputCommand> INPUT_COMMANDS = new ArrayList<>();
+
+    static {
+        INPUT_COMMANDS.add(new RollDiceCommand());
+        INPUT_COMMANDS.add(new ChooseScoreCommand());
+        INPUT_COMMANDS.add(new LockDiceCommand());
+        INPUT_COMMANDS.add(new ShowScoreboardCommand());
+    }
 
     public static void main(String[] args) {
         List<Die> dice = new ArrayList<>();
@@ -17,9 +24,13 @@ public class App {
             dice.add(new Die());
         }
 
-        while (!player.getScoreboard().isComplete()) {
-            turn(player, dice);
-        }
+        System.out.println("********");
+        System.out.println("INPUT INSTRUCTIONS");
+        System.out.println("--------");
+        INPUT_COMMANDS.forEach(c -> System.out.println(c.retrieveInstructions()));
+        System.out.println("********");
+
+        play(player, dice);
 
         System.out.println("********");
         System.out.println("FINAL SCOREBOARD (" + player.getName() + ")");
@@ -28,42 +39,34 @@ public class App {
         System.out.println("********");
     }
 
-    private static void turn(Player player, List<Die> dice) {
+    private static void play(Player player, List<Die> dice) {
         Scanner scanner = new Scanner(System.in);
-        int rolls = 0;
-        while (rolls < NUMBER_OF_ROLLS) {
-            Util.rollDice(dice);
-            rolls++;
-            if (rolls == NUMBER_OF_ROLLS) {
-                break;
+        Optional<InputCommand> inputCommand;
+        String userInput;
+        int numberOfRolls = 0;
+        while (!player.getScoreboard().isComplete()) {
+            userInput = scanner.next();
+            inputCommand = getFirstExecutableCommand(userInput, numberOfRolls);
+            if (inputCommand.isPresent()) {
+                numberOfRolls = executeCommand(player, dice, inputCommand, userInput, numberOfRolls);
             }
-            dice.forEach(d -> d.unlock());
-            System.out.println("die number(s) to lock di(c)e || s to score");
-            String userInput = scanner.next();
-            if (userInput.equals("s")) {
-                break;
-            }
-            lockDice(dice, userInput);
-        }
-        chooseScore(player, dice, scanner);
-    }
-
-    private static void lockDice(List<Die> dice, String userInput) {
-        char[] chars = userInput.toCharArray();
-        for (int x = 0; x < chars.length; x++) {
-            dice.get(Character.getNumericValue(chars[x]) - 1).lock();
         }
     }
 
-    private static void chooseScore(Player player, List<Die> dice, Scanner scanner) {
-        System.out.println("choose score");
-        List<Score> scoringOptions = player.getScoreboard().retrieveScoringOptions();
-        for (Score s : scoringOptions) {
-            System.out.println(s.getName() + ": " + s.evaluate(dice) + " [" + scoringOptions.indexOf(s) + "]");
+    private static int executeCommand(Player player, List<Die> dice, Optional<InputCommand> inputCommand, String userInput, int numberOfRolls) {
+        inputCommand.get().execute(player, dice, userInput);
+        if (inputCommand.get().isRoll()) {
+            numberOfRolls++;
         }
-        String next = scanner.next();
-        player.getScoreboard().addScore(scoringOptions.get(Integer.valueOf(next)), dice);
+        if (inputCommand.get().isTurnEndCommand()) {
+            dice.forEach(Die::unlock);
+            numberOfRolls = 0;
+        }
+        return numberOfRolls;
     }
 
+    private static Optional<InputCommand> getFirstExecutableCommand(String userInput, int numberOfRolls) {
+        return INPUT_COMMANDS.stream().filter(c -> c.isExecutable(userInput, numberOfRolls)).findFirst();
+    }
 
 }

@@ -13,7 +13,7 @@ public class FaceValueOfAKindScore extends Score {
 
     @Override
     public int evaluate(List<Die> dice) {
-        return Util.sumValue(dice, faceValue);
+        return DiceUtil.sumValue(dice, faceValue);
     }
 
     public int getFaceValue() {

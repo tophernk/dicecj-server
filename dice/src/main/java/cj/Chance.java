@@ -10,7 +10,7 @@ public class Chance extends Score {
 
     @Override
     public int evaluate(List<Die> dice) {
-        return Util.sum(dice);
+        return DiceUtil.sum(dice);
     }
 
 }
