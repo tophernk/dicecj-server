@@ -6,7 +6,7 @@ import java.util.*;
  * Hello dice!
  */
 public class App {
-    private static final int NUMBER_OF_DICE = 5;
+    public static final int NUMBER_OF_DICE = 5;
     private static final List<InputCommand> INPUT_COMMANDS = new ArrayList<>();
 
     static {

@@ -8,7 +8,10 @@ public class LockDiceCommand implements InputCommand {
         dice.forEach(Die::unlock);
         char[] chars = userInput.toCharArray();
         for (int x = 0; x < chars.length; x++) {
-            dice.get(Character.getNumericValue(chars[x]) - 1).lock();
+            int numericValue = Character.getNumericValue(chars[x]);
+            if (numericValue > 0 && numericValue <= App.NUMBER_OF_DICE) {
+                dice.get(numericValue - 1).lock();
+            }
         }
         dice.forEach(System.out::print);
         System.out.println();
