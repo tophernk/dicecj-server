@@ -1,10 +1,14 @@
 package cj;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.util.Comparator;
 import java.util.List;
 
+@Entity
 public class Straight extends Score {
 
+    @Transient
     private int requiredLength;
 
     public Straight(int length, int value, String name) {

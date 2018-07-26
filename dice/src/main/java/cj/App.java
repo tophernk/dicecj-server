@@ -1,5 +1,8 @@
 package cj;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.*;
 
 /**
@@ -24,6 +27,7 @@ public class App {
             dice.add(new Die());
         }
 
+
         System.out.println("********");
         System.out.println("INPUT INSTRUCTIONS");
         System.out.println("--------");
@@ -37,6 +41,19 @@ public class App {
         System.out.println("********");
         System.out.println(player.getScoreboard());
         System.out.println("********");
+
+        testPersistance(player);
+    }
+
+    private static void testPersistance(Player player) {
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ScoreUnit");
+        EntityManager em = factory.createEntityManager();
+
+        em.getTransaction().begin();
+        em.persist(player.getScoreboard());
+        em.getTransaction().commit();
+        em.close();
     }
 
     private static void play(Player player, List<Die> dice) {

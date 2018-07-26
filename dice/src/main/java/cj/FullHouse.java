@@ -1,9 +1,11 @@
 package cj;
 
+import javax.persistence.Entity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Entity
 public class FullHouse extends Score {
 
     public FullHouse() {

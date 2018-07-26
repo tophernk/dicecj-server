@@ -1,35 +1,52 @@
 package cj;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class Scoreboard {
     private static final int BONUS_VALUE = 35;
-    private Map<Score, Integer> scoreList;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "SCOREBOARD_SCORE", joinColumns = @JoinColumn(name = "SCOREBOARD_ID"),
+            inverseJoinColumns = @JoinColumn(name = "SCORE_ID"))
+    @OrderBy(value = "index")
+    private SortedSet<Score> closedScores;
+
+    @Transient
+    private List<Score> openScores;
 
     public Scoreboard() {
-        this.scoreList = new HashMap<>();
+        this.closedScores = new TreeSet<>(Comparator.comparingInt(Score::getIndex));
+        this.openScores = new ArrayList<>();
 
-        scoreList.put(new FaceValueOfAKindScore(1, "Ones"), null);
-        scoreList.put(new FaceValueOfAKindScore(2, "Twos"), null);
-        scoreList.put(new FaceValueOfAKindScore(3, "Threes"), null);
-        scoreList.put(new FaceValueOfAKindScore(4, "Fours"), null);
-        scoreList.put(new FaceValueOfAKindScore(5, "Fives"), null);
-        scoreList.put(new FaceValueOfAKindScore(6, "Sixes"), null);
-        scoreList.put(new OfAKindScore(3, "Three of a kind"), null);
-        scoreList.put(new OfAKindScore(4, "Four of a kind"), null);
-        scoreList.put(new FullHouse(), null);
-        scoreList.put(new Straight(4, 30, "Small Straight"), null);
-        scoreList.put(new Straight(5, 40, "Big Straight"), null);
-        scoreList.put(new OfAKindScore(5, 50, "Five of a kind"), null);
-        scoreList.put(new Chance(), null);
+        openScores.add(new FaceValueOfAKindScore(1, "Ones"));
+        openScores.add(new FaceValueOfAKindScore(2, "Twos"));
+        openScores.add(new FaceValueOfAKindScore(3, "Threes"));
+        openScores.add(new FaceValueOfAKindScore(4, "Fours"));
+        openScores.add(new FaceValueOfAKindScore(5, "Fives"));
+        openScores.add(new FaceValueOfAKindScore(6, "Sixes"));
+        openScores.add(new OfAKindScore(3, "Three of a kind"));
+        openScores.add(new OfAKindScore(4, "Four of a kind"));
+        openScores.add(new FullHouse());
+        openScores.add(new Straight(4, 30, "Small Straight"));
+        openScores.add(new Straight(5, 40, "Big Straight"));
+        openScores.add(new OfAKindScore(5, 50, "Five of a kind"));
+        openScores.add(new Chance());
+
+        openScores.forEach(s -> s.setIndex(openScores.indexOf(s)));
     }
 
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        scoreList.forEach((s, v) -> result.append(s.getName())
+        openScores.forEach((s) -> result.append(s.getName())
                 .append(": ")
-                .append(v)
+                .append(s.getValue())
                 .append("\n"));
         result.append("---------\nBonus: ")
                 .append(calculateBonus())
@@ -41,33 +58,27 @@ public class Scoreboard {
     }
 
     public boolean addScore(Score score, List<Die> dice) {
-        if (scoreList.get(score) != null) {
+        if (!openScores.contains(score)) {
             return false;
         }
-        scoreList.put(score, score.evaluate(dice));
+        closedScores.add(score);
+        openScores.remove(score);
+        score.setValue(score.evaluate(dice));
         return true;
     }
 
     public boolean isComplete() {
-        return scoreList.values().stream().allMatch(Objects::nonNull);
+        return openScores.isEmpty();
     }
 
     public List<Score> retrieveScoringOptions() {
-        List<Score> scores = new ArrayList<>();
-        scoreList.forEach((s, v) -> {
-            if (v == null) {
-                scores.add(s);
-            }
-        });
-        return scores;
+        return openScores;
     }
 
     public int getTotal() {
         int total = 0;
-        for (Integer value : scoreList.values()) {
-            if (value != null) {
-                total += value;
-            }
+        for (Score score : closedScores) {
+            total += score.getValue();
         }
         return total + calculateBonus();
     }
@@ -75,14 +86,20 @@ public class Scoreboard {
     public int calculateBonus() {
         int upperTotal = 0;
         int requiredBonusValue = 0;
-        for (Score s : scoreList.keySet()) {
+        for (Score s : closedScores) {
             if (s instanceof FaceValueOfAKindScore) {
                 requiredBonusValue += ((FaceValueOfAKindScore) s).getFaceValue() * 3;
-                if (scoreList.get(s) != null) {
-                    upperTotal += scoreList.get(s);
-                }
+                upperTotal += s.getValue();
             }
         }
         return upperTotal >= requiredBonusValue ? BONUS_VALUE : 0;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

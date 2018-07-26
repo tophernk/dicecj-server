@@ -11,7 +11,9 @@ public class ChooseScoreCommand implements InputCommand {
             System.out.println(s.getName() + ": " + s.evaluate(dice) + " [" + scoringOptions.indexOf(s) + "]");
         }
         userInput = new Scanner(System.in).next();
-        player.getScoreboard().addScore(scoringOptions.get(Integer.valueOf(userInput)), dice);
+        if (Integer.valueOf(userInput) < scoringOptions.size()) {
+            player.getScoreboard().addScore(scoringOptions.get(Integer.valueOf(userInput)), dice);
+        }
     }
 
     @Override

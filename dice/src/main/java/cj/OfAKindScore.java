@@ -1,9 +1,13 @@
 package cj;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.util.List;
 
+@Entity
 public class OfAKindScore extends Score {
 
+    @Transient
     private int count;
 
     public OfAKindScore(int count, String name) {

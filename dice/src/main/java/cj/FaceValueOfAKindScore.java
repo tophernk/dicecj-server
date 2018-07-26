@@ -1,9 +1,13 @@
 package cj;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.util.List;
 
+@Entity
 public class FaceValueOfAKindScore extends Score {
 
+    @Transient
     private int faceValue;
 
     public FaceValueOfAKindScore(int faceValue, String name) {
