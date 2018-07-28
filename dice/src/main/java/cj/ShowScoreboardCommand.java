@@ -20,7 +20,7 @@ public class ShowScoreboardCommand implements InputCommand {
 
     @Override
     public String retrieveInstructions() {
-        return "p to print scoreboard";
+        return "[p] print scoreboard";
     }
 
     @Override

@@ -14,8 +14,8 @@ public class App {
 
     static {
         INPUT_COMMANDS.add(new RollDiceCommand());
-        INPUT_COMMANDS.add(new ChooseScoreCommand());
-        INPUT_COMMANDS.add(new LockDiceCommand());
+        INPUT_COMMANDS.add(new SelectDiceCommand());
+        INPUT_COMMANDS.add(new CancelCommand(new ChooseScoreCommand()));
         INPUT_COMMANDS.add(new ShowScoreboardCommand());
     }
 
@@ -71,13 +71,17 @@ public class App {
     }
 
     private static int executeCommand(Player player, List<Die> dice, Optional<InputCommand> inputCommand, String userInput, int numberOfRolls) {
-        inputCommand.get().execute(player, dice, userInput);
-        if (inputCommand.get().isRoll()) {
-            numberOfRolls++;
-        }
-        if (inputCommand.get().isTurnEndCommand()) {
-            dice.forEach(Die::unlock);
-            numberOfRolls = 0;
+        try {
+            inputCommand.get().execute(player, dice, userInput);
+            if (inputCommand.get().isRoll()) {
+                numberOfRolls++;
+            }
+            if (inputCommand.get().isTurnEndCommand()) {
+                dice.forEach(Die::unlock);
+                numberOfRolls = 0;
+            }
+        } catch (InputException e) {
+            System.out.println(e.getMessage());
         }
         return numberOfRolls;
     }

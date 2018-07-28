@@ -25,7 +25,7 @@ public class RollDiceCommand implements InputCommand {
 
     @Override
     public String retrieveInstructions() {
-        return "r to roll dice";
+        return "[r] roll dice";
     }
 
     @Override

@@ -2,6 +2,7 @@ package cj;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Scoreboard {
@@ -43,13 +44,18 @@ public class Scoreboard {
 
     @Override
     public String toString() {
+        SortedSet<Score> scores = new TreeSet<>(Comparator.comparingInt(Score::getIndex));
+        scores.addAll(openScores);
+        scores.addAll(closedScores);
+
         StringBuilder result = new StringBuilder();
-        openScores.forEach((s) -> result.append(s.getName())
+
+        scores.forEach((s) -> result.append(s.getName())
                 .append(": ")
                 .append(s.getValue())
                 .append("\n"));
         result.append("---------\nBonus: ")
-                .append(calculateBonus())
+                .append(calculateBonus() + " (" + calculateCurrentDiffToRegularBonus() + ")")
                 .append("\n---------\n")
                 .append("Total: ")
                 .append(getTotal());
@@ -84,15 +90,28 @@ public class Scoreboard {
     }
 
     public int calculateBonus() {
+        SortedSet<Score> scores = new TreeSet<>(Comparator.comparingInt(Score::getIndex));
+        scores.addAll(openScores);
+        scores.addAll(closedScores);
+
         int upperTotal = 0;
         int requiredBonusValue = 0;
-        for (Score s : closedScores) {
-            if (s instanceof FaceValueOfAKindScore) {
-                requiredBonusValue += ((FaceValueOfAKindScore) s).getFaceValue() * 3;
-                upperTotal += s.getValue();
-            }
+
+        Set<Score> allFaceValueScores = scores.stream().filter(s -> s instanceof FaceValueOfAKindScore).collect(Collectors.toSet());
+        for (Score s : allFaceValueScores) {
+            requiredBonusValue += ((FaceValueOfAKindScore) s).getFaceValue() * 3;
+            upperTotal += s.getValue();
         }
         return upperTotal >= requiredBonusValue ? BONUS_VALUE : 0;
+    }
+
+    public int calculateCurrentDiffToRegularBonus() {
+        Set<Score> closedFaceValueScores = closedScores.stream().filter(s -> s instanceof FaceValueOfAKindScore).collect(Collectors.toSet());
+        int currentDiffToRegularBons = 0;
+        for (Score score : closedFaceValueScores) {
+            currentDiffToRegularBons += score.getValue() - ((FaceValueOfAKindScore) score).getFaceValue() * 3;
+        }
+        return currentDiffToRegularBons;
     }
 
     public int getId() {

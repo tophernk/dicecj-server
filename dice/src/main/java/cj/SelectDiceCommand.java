@@ -2,15 +2,14 @@ package cj;
 
 import java.util.List;
 
-public class LockDiceCommand implements InputCommand {
+public class SelectDiceCommand implements InputCommand {
     @Override
     public void execute(Player player, List<Die> dice, String userInput) {
-        dice.forEach(Die::unlock);
         char[] chars = userInput.toCharArray();
         for (int x = 0; x < chars.length; x++) {
             int numericValue = Character.getNumericValue(chars[x]);
             if (numericValue > 0 && numericValue <= App.NUMBER_OF_DICE) {
-                dice.get(numericValue - 1).lock();
+                dice.get(numericValue - 1).toggleLock();
             }
         }
         dice.forEach(System.out::print);
@@ -29,7 +28,7 @@ public class LockDiceCommand implements InputCommand {
 
     @Override
     public String retrieveInstructions() {
-        return "die number(s) to lock di(c)e";
+        return "[die number(s)] select di(c)e";
     }
 
     @Override

@@ -2,6 +2,7 @@ package cj;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -18,8 +19,9 @@ public class Straight extends Score {
 
     @Override
     public int evaluate(List<Die> dice) {
-        dice.sort(Comparator.comparingInt(Die::getValue));
-        return determineStraightLength(dice) >= requiredLength ? getFixedValue() : 0;
+        List<Die> diceCopy = new ArrayList<>(dice);
+        diceCopy.sort(Comparator.comparingInt(Die::getValue));
+        return determineStraightLength(diceCopy) >= requiredLength ? getFixedValue() : 0;
     }
 
     private int determineStraightLength(List<Die> dice) {

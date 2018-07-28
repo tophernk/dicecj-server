@@ -3,16 +3,27 @@ package cj;
 import java.util.List;
 import java.util.Scanner;
 
-public class ChooseScoreCommand implements InputCommand {
+public class ChooseScoreCommand implements Promptable {
     @Override
-    public void execute(Player player, List<Die> dice, String userInput) {
+    public String prompt(Player player, List<Die> dice) throws InputException {
+        if (dice.stream().anyMatch(d -> !d.isValid())) {
+            throw new InputException("please (re)roll dice");
+        }
         List<Score> scoringOptions = player.getScoreboard().retrieveScoringOptions();
         for (Score s : scoringOptions) {
             System.out.println(s.getName() + ": " + s.evaluate(dice) + " [" + scoringOptions.indexOf(s) + "]");
         }
-        userInput = new Scanner(System.in).next();
-        if (Integer.valueOf(userInput) < scoringOptions.size()) {
+        return new Scanner(System.in).next();
+    }
+
+    @Override
+    public void execute(Player player, List<Die> dice, String userInput) throws InputException {
+        try {
+            List<Score> scoringOptions = player.getScoreboard().retrieveScoringOptions();
             player.getScoreboard().addScore(scoringOptions.get(Integer.valueOf(userInput)), dice);
+            dice.forEach(Die::reset);
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            throw new InputException("reset score selection: no score has been added to the scoreboard");
         }
     }
 
@@ -28,12 +39,11 @@ public class ChooseScoreCommand implements InputCommand {
 
     @Override
     public String retrieveInstructions() {
-        return "s to put score on scoreboard";
+        return "[s] put score on scoreboard";
     }
 
     @Override
     public boolean isRoll() {
         return false;
     }
-
 }
