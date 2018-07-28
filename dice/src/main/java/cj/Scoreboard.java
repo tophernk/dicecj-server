@@ -12,6 +12,10 @@ public class Scoreboard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PLAYER_ID")
+    private Player player;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "SCOREBOARD_SCORE", joinColumns = @JoinColumn(name = "SCOREBOARD_ID"),
             inverseJoinColumns = @JoinColumn(name = "SCORE_ID"))
@@ -40,6 +44,11 @@ public class Scoreboard {
         openScores.add(new Chance());
 
         openScores.forEach(s -> s.setIndex(openScores.indexOf(s)));
+    }
+
+    public Scoreboard(Player player) {
+        this();
+        this.player = player;
     }
 
     @Override
@@ -120,5 +129,13 @@ public class Scoreboard {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface InputCommand {
 
-    public void execute(Player player, List<Die> dice, String userInput) throws InputException;
+    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput) throws InputException;
 
     public boolean isTurnEndCommand();
 

@@ -4,8 +4,8 @@ import java.util.List;
 
 public class ShowScoreboardCommand implements InputCommand {
     @Override
-    public void execute(Player player, List<Die> dice, String userInput) {
-        System.out.println(player.getScoreboard());
+    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput) {
+        System.out.println(scoreboard);
     }
 
     @Override

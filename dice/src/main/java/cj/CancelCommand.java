@@ -10,12 +10,12 @@ public class CancelCommand implements InputCommand {
         this.baseCommand = baseCommand;
     }
     @Override
-    public void execute(Player player, List<Die> dice, String userInput) throws InputException {
-        String userInputFromPrompt = baseCommand.prompt(player, dice);
+    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput) throws InputException {
+        String userInputFromPrompt = baseCommand.prompt(scoreboard, dice);
         if (userInputFromPrompt.equals("c")) {
             throw new InputException("command has been canceled");
         }
-        baseCommand.execute(player, dice, userInputFromPrompt);
+        baseCommand.execute(scoreboard, dice, userInputFromPrompt);
     }
 
     @Override

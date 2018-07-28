@@ -7,7 +7,7 @@ public class RollDiceCommand implements InputCommand {
     private static final int ALLOWED_NUMBER_OF_ROLLS = 3;
 
     @Override
-    public void execute(Player player, List<Die> dice, String userInput) {
+    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput) {
         dice.forEach(Die::roll);
         dice.forEach(System.out::print);
         System.out.println();

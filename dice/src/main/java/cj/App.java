@@ -34,45 +34,47 @@ public class App {
         INPUT_COMMANDS.forEach(c -> System.out.println(c.retrieveInstructions()));
         System.out.println("********");
 
-        play(player, dice);
+        Scoreboard scoreboard = play(player, dice);
 
         System.out.println("********");
         System.out.println("FINAL SCOREBOARD (" + player.getName() + ")");
         System.out.println("********");
-        System.out.println(player.getScoreboard());
+        System.out.println(scoreboard);
         System.out.println("********");
 
-        testPersistance(player);
+        testPersistance(scoreboard);
     }
 
-    private static void testPersistance(Player player) {
+    private static void testPersistance(Scoreboard scoreboard) {
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("ScoreUnit");
         EntityManager em = factory.createEntityManager();
 
         em.getTransaction().begin();
-        em.persist(player.getScoreboard());
+        em.persist(scoreboard);
         em.getTransaction().commit();
         em.close();
     }
 
-    private static void play(Player player, List<Die> dice) {
+    private static Scoreboard play(Player player, List<Die> dice) {
         Scanner scanner = new Scanner(System.in);
         Optional<InputCommand> inputCommand;
         String userInput;
         int numberOfRolls = 0;
-        while (!player.getScoreboard().isComplete()) {
+        Scoreboard scoreboard = new Scoreboard(player);
+        while (!scoreboard.isComplete()) {
             userInput = scanner.next();
             inputCommand = getFirstExecutableCommand(userInput, numberOfRolls);
             if (inputCommand.isPresent()) {
-                numberOfRolls = executeCommand(player, dice, inputCommand, userInput, numberOfRolls);
+                numberOfRolls = executeCommand(scoreboard, dice, inputCommand, userInput, numberOfRolls);
             }
         }
+        return scoreboard;
     }
 
-    private static int executeCommand(Player player, List<Die> dice, Optional<InputCommand> inputCommand, String userInput, int numberOfRolls) {
+    private static int executeCommand(Scoreboard scoreboard, List<Die> dice, Optional<InputCommand> inputCommand, String userInput, int numberOfRolls) {
         try {
-            inputCommand.get().execute(player, dice, userInput);
+            inputCommand.get().execute(scoreboard, dice, userInput);
             if (inputCommand.get().isRoll()) {
                 numberOfRolls++;
             }

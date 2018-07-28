@@ -4,7 +4,7 @@ import java.util.List;
 
 public class SelectDiceCommand implements InputCommand {
     @Override
-    public void execute(Player player, List<Die> dice, String userInput) {
+    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput) {
         char[] chars = userInput.toCharArray();
         for (int x = 0; x < chars.length; x++) {
             int numericValue = Character.getNumericValue(chars[x]);
