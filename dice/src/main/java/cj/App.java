@@ -27,6 +27,9 @@ public class App {
             dice.add(new Die());
         }
 
+        EntityManager em = initPersitence();
+        Player cj = new PlayerDao(em).findPlayerByName("CJ");
+        System.out.println(cj != null ? cj.getName() : "");
 
         System.out.println("********");
         System.out.println("INPUT INSTRUCTIONS");
@@ -42,18 +45,12 @@ public class App {
         System.out.println(scoreboard);
         System.out.println("********");
 
-        testPersistance(scoreboard);
+        new ScoreboardDao(em).create(scoreboard);
     }
 
-    private static void testPersistance(Scoreboard scoreboard) {
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ScoreUnit");
-        EntityManager em = factory.createEntityManager();
-
-        em.getTransaction().begin();
-        em.persist(scoreboard);
-        em.getTransaction().commit();
-        em.close();
+    private static EntityManager initPersitence() {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("DiceCJ");
+        return factory.createEntityManager();
     }
 
     private static Scoreboard play(Player player, List<Die> dice) {
