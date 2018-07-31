@@ -26,6 +26,9 @@ public class Scoreboard {
     private List<Score> openScores;
 
     public Scoreboard() {
+    }
+
+    private void init() {
         this.closedScores = new TreeSet<>(Comparator.comparingInt(Score::getIndex));
         this.openScores = new ArrayList<>();
 
@@ -47,8 +50,8 @@ public class Scoreboard {
     }
 
     public Scoreboard(Player player) {
-        this();
         this.player = player;
+        init();
     }
 
     @Override

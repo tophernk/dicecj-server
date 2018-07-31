@@ -12,6 +12,9 @@ public class Straight extends Score {
     @Transient
     private int requiredLength;
 
+    public Straight() {
+    }
+
     public Straight(int length, int value, String name) {
         super(name, value);
         this.requiredLength = length;

@@ -9,18 +9,15 @@ import javax.persistence.metamodel.EntityType;
 
 public class PlayerDao extends AbstractDao {
 
-    public PlayerDao(EntityManager em) {
-        setEntityManager(em);
-    }
-
     public Player findPlayerByName(String name) {
-        CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
+        EntityManager entityManager = CrudSupport.getEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Player> query = criteriaBuilder.createQuery(Player.class);
         Root<Player> root = query.from(Player.class);
         EntityType<Player> playerModel = root.getModel();
         query.where(criteriaBuilder.equal(root.get(playerModel.getAttribute("name").getName()), name));
         query.select(root);
-        TypedQuery<Player> typedQuery = getEntityManager().createQuery(query);
+        TypedQuery<Player> typedQuery = entityManager.createQuery(query);
         return typedQuery.getSingleResult();
     }
 }

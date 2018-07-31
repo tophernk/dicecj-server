@@ -10,6 +10,9 @@ public class OfAKindScore extends Score {
     @Transient
     private int count;
 
+    public OfAKindScore() {
+    }
+
     public OfAKindScore(int count, String name) {
         super(name);
         this.count = count;

@@ -10,6 +10,9 @@ public class FaceValueOfAKindScore extends Score {
     @Transient
     private int faceValue;
 
+    public FaceValueOfAKindScore() {
+    }
+
     public FaceValueOfAKindScore(int faceValue, String name) {
         super(name);
         this.faceValue = faceValue;

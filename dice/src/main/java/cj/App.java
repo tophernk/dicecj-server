@@ -21,15 +21,13 @@ public class App {
 
     public static void main(String[] args) {
         List<Die> dice = new ArrayList<>();
-        Player player = new Player("CJ");
 
         for (int i = 0; i < NUMBER_OF_DICE; i++) {
             dice.add(new Die());
         }
 
-        EntityManager em = initPersitence();
-        Player cj = new PlayerDao(em).findPlayerByName("CJ");
-        System.out.println(cj != null ? cj.getName() : "");
+        Player player = new PlayerDao().findPlayerByName("CJ");
+        System.out.println(player != null ? player.getName() : "");
 
         System.out.println("********");
         System.out.println("INPUT INSTRUCTIONS");
@@ -45,12 +43,12 @@ public class App {
         System.out.println(scoreboard);
         System.out.println("********");
 
-        new ScoreboardDao(em).create(scoreboard);
-    }
-
-    private static EntityManager initPersitence() {
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("DiceCJ");
-        return factory.createEntityManager();
+        int scoreboardRank = new ScoreboardSerivce().determineScoreboardRank(scoreboard);
+        if (scoreboardRank <= 9) {
+            new ScoreboardDao().create(scoreboard);
+            System.out.println("Score has been saved - highscore rank " + scoreboardRank);
+        }
+        System.out.println("Score has not been saved - no top 10 score");
     }
 
     private static Scoreboard play(Player player, List<Die> dice) {
