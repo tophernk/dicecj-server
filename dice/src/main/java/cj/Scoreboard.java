@@ -103,7 +103,9 @@ public class Scoreboard {
 
     public int calculateBonus() {
         SortedSet<Score> scores = new TreeSet<>(Comparator.comparingInt(Score::getIndex));
-        scores.addAll(openScores);
+        if (openScores != null) {
+            scores.addAll(openScores);
+        }
         scores.addAll(closedScores);
 
         int upperTotal = 0;

@@ -1,10 +1,11 @@
 package cj;
 
 import javax.persistence.*;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
-public abstract class Score {
+public abstract class Score implements Comparable<Score> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,5 +65,10 @@ public abstract class Score {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    @Override
+    public int compareTo(Score score) {
+        return Integer.compare(getIndex(), score.getIndex());
     }
 }

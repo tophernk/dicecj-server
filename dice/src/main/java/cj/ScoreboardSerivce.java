@@ -16,7 +16,7 @@ public class ScoreboardSerivce {
     public int determineScoreboardRank(Scoreboard scoreboard) {
         List<Scoreboard> topScoreboardsByPlayer = findTopScoreboardsByPlayer(scoreboard.getPlayer());
         topScoreboardsByPlayer.add(scoreboard);
-        topScoreboardsByPlayer.sort(Comparator.comparingInt(Scoreboard::getTotal));
-        return topScoreboardsByPlayer.indexOf(scoreboard);
+        topScoreboardsByPlayer.sort((o1, o2) -> Integer.compare(o1.getTotal(), o2.getTotal()) * -1);
+        return topScoreboardsByPlayer.indexOf(scoreboard) + 1;
     }
 }
