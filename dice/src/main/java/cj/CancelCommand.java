@@ -10,12 +10,12 @@ public class CancelCommand implements InputCommand {
         this.baseCommand = baseCommand;
     }
     @Override
-    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput) throws InputException {
+    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput, int numberOfRolls) throws InputException {
         String userInputFromPrompt = baseCommand.prompt(scoreboard, dice);
         if (userInputFromPrompt.equals("c")) {
             throw new InputException("command has been canceled");
         }
-        baseCommand.execute(scoreboard, dice, userInputFromPrompt);
+        baseCommand.execute(scoreboard, dice, userInputFromPrompt, numberOfRolls);
     }
 
     @Override
@@ -24,8 +24,8 @@ public class CancelCommand implements InputCommand {
     }
 
     @Override
-    public boolean isExecutable(String userInput, int numberOfRolls) {
-        return baseCommand.isExecutable(userInput, numberOfRolls);
+    public boolean isTrigger(String userInput) {
+        return baseCommand.isTrigger(userInput);
     }
 
     @Override

@@ -1,29 +1,22 @@
 package cj;
 
 import javax.persistence.Entity;
-import javax.persistence.Transient;
 import java.util.List;
 
 @Entity
-public class FaceValueOfAKindScore extends Score {
-
-    @Transient
-    private int faceValue;
+public abstract class FaceValueOfAKindScore extends Score {
 
     public FaceValueOfAKindScore() {
     }
 
-    public FaceValueOfAKindScore(int faceValue, String name) {
+    public FaceValueOfAKindScore(String name) {
         super(name);
-        this.faceValue = faceValue;
     }
 
     @Override
     public int evaluate(List<Die> dice) {
-        return DiceUtil.sumValue(dice, faceValue);
+        return DiceUtil.sumValue(dice, getFaceValue());
     }
 
-    public int getFaceValue() {
-        return faceValue;
-    }
+    public abstract int getFaceValue();
 }

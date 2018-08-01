@@ -15,13 +15,14 @@ public class ScoreboardDao extends AbstractDao {
     }
 
     public List<Scoreboard> findScoreboardsByPlayer(Player player) {
-        CriteriaBuilder criteriaBuilder = CrudSupport.getEntityManager().getCriteriaBuilder();
+        EntityManager entityManager = CrudSupport.getEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Scoreboard> query = criteriaBuilder.createQuery(Scoreboard.class);
         Root<Scoreboard> root = query.from(Scoreboard.class);
         EntityType<Scoreboard> model = root.getModel();
         query.where(criteriaBuilder.equal(root.get(model.getAttribute("player").getName()), player));
         query.select(root);
-        TypedQuery<Scoreboard> typedQuery = CrudSupport.getEntityManager().createQuery(query);
+        TypedQuery<Scoreboard> typedQuery = entityManager.createQuery(query);
         return typedQuery.getResultList();
     }
 }

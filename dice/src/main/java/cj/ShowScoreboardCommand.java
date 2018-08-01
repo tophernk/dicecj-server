@@ -4,8 +4,8 @@ import java.util.List;
 
 public class ShowScoreboardCommand implements InputCommand {
     @Override
-    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput) {
-        System.out.println(scoreboard);
+    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput, int numberOfRolls) {
+        ServiceSupport.getScoreboardSerivce().printScores(scoreboard);
     }
 
     @Override
@@ -14,7 +14,7 @@ public class ShowScoreboardCommand implements InputCommand {
     }
 
     @Override
-    public boolean isExecutable(String userInput, int numberOfRolls) {
+    public boolean isTrigger(String userInput) {
         return userInput.equals("p");
     }
 

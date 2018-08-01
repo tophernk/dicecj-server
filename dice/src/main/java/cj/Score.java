@@ -1,7 +1,6 @@
 package cj;
 
 import javax.persistence.*;
-import java.util.Comparator;
 import java.util.List;
 
 @Entity

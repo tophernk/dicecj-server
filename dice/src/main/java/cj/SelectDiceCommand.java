@@ -4,11 +4,11 @@ import java.util.List;
 
 public class SelectDiceCommand implements InputCommand {
     @Override
-    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput) {
+    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput, int numberOfRolls) {
         char[] chars = userInput.toCharArray();
         for (int x = 0; x < chars.length; x++) {
             int numericValue = Character.getNumericValue(chars[x]);
-            if (numericValue > 0 && numericValue <= App.NUMBER_OF_DICE) {
+            if (numericValue > 0 && numericValue <= CoreService.NUMBER_OF_DICE) {
                 dice.get(numericValue - 1).toggleLock();
             }
         }
@@ -22,7 +22,7 @@ public class SelectDiceCommand implements InputCommand {
     }
 
     @Override
-    public boolean isExecutable(String userInput, int numberOfRolls) {
+    public boolean isTrigger(String userInput) {
         return userInput.matches("[0-9]+");
     }
 

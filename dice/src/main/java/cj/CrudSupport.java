@@ -10,5 +10,4 @@ public class CrudSupport {
     public static EntityManager getEntityManager() {
         return ENTITY_MANAGER;
     }
-
 }

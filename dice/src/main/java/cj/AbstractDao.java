@@ -9,6 +9,5 @@ public abstract class AbstractDao {
         entityManager.getTransaction().begin();
         entityManager.persist(o);
         entityManager.getTransaction().commit();
-        entityManager.close();
     }
 }

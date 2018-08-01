@@ -7,7 +7,11 @@ public class RollDiceCommand implements InputCommand {
     private static final int ALLOWED_NUMBER_OF_ROLLS = 3;
 
     @Override
-    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput) {
+    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput, int numberOfRolls) {
+        if (numberOfRolls >= ALLOWED_NUMBER_OF_ROLLS) {
+            System.out.println("no more rolls left");
+            return;
+        }
         dice.forEach(Die::roll);
         dice.forEach(System.out::print);
         System.out.println();
@@ -19,8 +23,8 @@ public class RollDiceCommand implements InputCommand {
     }
 
     @Override
-    public boolean isExecutable(String userInput, int numberOfRolls) {
-        return userInput.equals("r") && numberOfRolls < ALLOWED_NUMBER_OF_ROLLS;
+    public boolean isTrigger(String userInput) {
+        return userInput.equals("r");
     }
 
     @Override
