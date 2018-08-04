@@ -1,4 +1,7 @@
-package cj;
+package cj.entity;
+
+import cj.DiceUtil;
+import cj.Die;
 
 import javax.persistence.Entity;
 import java.util.List;

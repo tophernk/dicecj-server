@@ -1,4 +1,8 @@
-package cj;
+package cj.command;
+
+import cj.service.CoreService;
+import cj.Die;
+import cj.entity.Scoreboard;
 
 import java.util.List;
 

@@ -1,4 +1,8 @@
-package cj;
+package cj.command;
+
+import cj.Die;
+import cj.InputException;
+import cj.entity.Scoreboard;
 
 import java.util.List;
 

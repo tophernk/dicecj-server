@@ -1,4 +1,10 @@
-package cj;
+package cj.service;
+
+import cj.Die;
+import cj.InputException;
+import cj.command.*;
+import cj.entity.Player;
+import cj.entity.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.List;

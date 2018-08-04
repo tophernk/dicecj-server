@@ -1,4 +1,6 @@
-package cj;
+package cj.entity;
+
+import cj.Die;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;

@@ -1,4 +1,4 @@
-package cj;
+package cj.service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;

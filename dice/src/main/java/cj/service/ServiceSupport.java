@@ -1,4 +1,4 @@
-package cj;
+package cj.service;
 
 public class ServiceSupport {
 

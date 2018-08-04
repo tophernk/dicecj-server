@@ -1,4 +1,6 @@
-package cj;
+package cj.service;
+
+import cj.entity.Player;
 
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;

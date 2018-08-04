@@ -1,7 +1,9 @@
-package cj;
+package cj.entity;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.SortedSet;
 
 @Entity
 public class Scoreboard {

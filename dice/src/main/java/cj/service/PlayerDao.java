@@ -1,4 +1,6 @@
-package cj;
+package cj.service;
+
+import cj.entity.Player;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

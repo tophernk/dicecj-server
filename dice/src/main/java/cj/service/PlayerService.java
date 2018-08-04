@@ -1,4 +1,6 @@
-package cj;
+package cj.service;
+
+import cj.entity.Player;
 
 public class PlayerService {
 

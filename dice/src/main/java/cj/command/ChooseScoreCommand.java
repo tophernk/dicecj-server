@@ -1,4 +1,9 @@
-package cj;
+package cj.command;
+
+import cj.*;
+import cj.entity.Score;
+import cj.entity.Scoreboard;
+import cj.service.ServiceSupport;
 
 import java.util.List;
 import java.util.Scanner;
@@ -23,7 +28,7 @@ public class ChooseScoreCommand implements Promptable {
             ServiceSupport.getScoreboardSerivce().addScore(scoreboard, scoringOptions.get(Integer.valueOf(userInput)), dice);
             dice.forEach(Die::reset);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            throw new InputException("reset score selection: no score has been added to the scoreboard");
+            throw new InputException("reset entity selection: no entity has been added to the scoreboard");
         }
     }
 
@@ -39,7 +44,7 @@ public class ChooseScoreCommand implements Promptable {
 
     @Override
     public String retrieveInstructions() {
-        return "[s] put score on scoreboard";
+        return "[s] put entity on scoreboard";
     }
 
     @Override

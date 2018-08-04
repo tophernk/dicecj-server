@@ -1,5 +1,10 @@
 package cj;
 
+import cj.entity.Player;
+import cj.entity.Scoreboard;
+import cj.service.CrudSupport;
+import cj.service.ServiceSupport;
+
 /**
  * Hello dice!
  */

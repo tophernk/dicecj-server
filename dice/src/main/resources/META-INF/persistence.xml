@@ -6,19 +6,19 @@
     <persistence-unit name="DiceCJ" transaction-type="JTA">
         <!--<jta-data-source>jdbc/MyDerbyResource</jta-data-source>-->
 
-        <class>cj.Player</class>
-        <class>cj.Score</class>
-        <class>cj.OneFaceScore</class>
-        <class>cj.TwoFaceScore</class>
-        <class>cj.ThreeFaceScore</class>
-        <class>cj.FourFaceScore</class>
-        <class>cj.FiveFaceScore</class>
-        <class>cj.SixFaceScore</class>
-        <class>cj.OfAKindScore</class>
-        <class>cj.FullHouse</class>
-        <class>cj.Straight</class>
-        <class>cj.Chance</class>
-        <class>cj.Scoreboard</class>
+        <class>cj.entity.Player</class>
+        <class>cj.entity.Score</class>
+        <class>cj.entity.OneFaceScore</class>
+        <class>cj.entity.TwoFaceScore</class>
+        <class>cj.entity.ThreeFaceScore</class>
+        <class>cj.entity.FourFaceScore</class>
+        <class>cj.entity.FiveFaceScore</class>
+        <class>cj.entity.SixFaceScore</class>
+        <class>cj.entity.OfAKindScore</class>
+        <class>cj.entity.FullHouse</class>
+        <class>cj.entity.Straight</class>
+        <class>cj.entity.Chance</class>
+        <class>cj.entity.Scoreboard</class>
 
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/dicecjdb"/>
