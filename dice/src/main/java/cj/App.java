@@ -6,8 +6,7 @@ package cj;
 public class App {
 
     public static void main(String[] args) {
-        Player player = new PlayerDao().findPlayerByName("CJ");
-        System.out.println(player != null ? player.getName() : "");
+        Player player = ServiceSupport.getPlayerService().findOrCreatePlayer("CJ");
 
         Scoreboard scoreboard = ServiceSupport.getCoreService().play(player);
 

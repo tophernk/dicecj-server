@@ -3,17 +3,30 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
-    <persistence-unit name="DiceCJ">
+    <persistence-unit name="DiceCJ" transaction-type="JTA">
+        <!--<jta-data-source>jdbc/MyDerbyResource</jta-data-source>-->
+
+        <class>cj.Player</class>
         <class>cj.Score</class>
+        <class>cj.OneFaceScore</class>
+        <class>cj.TwoFaceScore</class>
+        <class>cj.ThreeFaceScore</class>
+        <class>cj.FourFaceScore</class>
+        <class>cj.FiveFaceScore</class>
+        <class>cj.SixFaceScore</class>
+        <class>cj.OfAKindScore</class>
+        <class>cj.FullHouse</class>
+        <class>cj.Straight</class>
+        <class>cj.Chance</class>
         <class>cj.Scoreboard</class>
 
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:derby:db/dicecjdb"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/dicecjdb"/>
             <property name="javax.persistence.jdbc.user" value=""/>
             <property name="javax.persistence.jdbc.password" value=""/>
-            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
 
-            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.show_sql" value="false" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect"/>
         </properties>
     </persistence-unit>

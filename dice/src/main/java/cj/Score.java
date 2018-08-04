@@ -20,7 +20,6 @@ public abstract class Score implements Comparable<Score> {
     private int fixedValue;
 
     public Score() {
-        name = null;
     }
 
     public Score(String name) {

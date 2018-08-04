@@ -1,6 +1,7 @@
 package cj;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,6 +19,10 @@ public class PlayerDao extends AbstractDao {
         query.where(criteriaBuilder.equal(root.get(playerModel.getAttribute("name").getName()), name));
         query.select(root);
         TypedQuery<Player> typedQuery = entityManager.createQuery(query);
-        return typedQuery.getSingleResult();
+        try {
+            return typedQuery.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
