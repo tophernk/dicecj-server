@@ -1,22 +1,20 @@
 package cj.dice.command;
 
 import cj.dice.Die;
-import cj.dice.entity.Scoreboard;
-
-import java.util.List;
+import cj.dice.service.TurnState;
 
 public class RollDiceCommand implements InputCommand {
 
     private static final int ALLOWED_NUMBER_OF_ROLLS = 3;
 
     @Override
-    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput, int numberOfRolls) {
-        if (numberOfRolls >= ALLOWED_NUMBER_OF_ROLLS) {
+    public void execute(String userInput, TurnState turnState) {
+        if (turnState.getNumberOfRolls() >= ALLOWED_NUMBER_OF_ROLLS) {
             System.out.println("no more rolls left");
             return;
         }
-        dice.forEach(Die::roll);
-        dice.forEach(System.out::print);
+        turnState.getDice().forEach(Die::roll);
+        turnState.getDice().forEach(System.out::print);
         System.out.println();
     }
 

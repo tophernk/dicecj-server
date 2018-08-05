@@ -6,24 +6,33 @@ import cj.dice.command.*;
 import cj.dice.entity.Player;
 import cj.dice.entity.Scoreboard;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+@Stateless
 public class CoreService {
+
+    @Inject
+    private ScoreboardSerivce scoreboardSerivce;
 
     public static final int NUMBER_OF_DICE = 5;
 
     private List<InputCommand> inputCommands = new ArrayList<>();
 
     public Scoreboard play(Player player) {
-        List<Die> dice = initDice();
         initCommands();
-        Scoreboard scoreboard = ServiceSupport.getScoreboardSerivce().buildScoreboard(player);
         printInstruction();
-        startRepl(dice, scoreboard);
-        return scoreboard;
+        TurnState turnState = initTurn(player);
+        startRepl(turnState);
+        return turnState.getScoreboard();
+    }
+
+    public TurnState initTurn(Player player) {
+        return new TurnState(scoreboardSerivce.buildScoreboard(player), initDice(), 0);
     }
 
     private List<Die> initDice() {
@@ -34,16 +43,16 @@ public class CoreService {
         return dice;
     }
 
-    private void startRepl(List<Die> dice, Scoreboard scoreboard) {
-        int numberOfRolls = 0;
+    private void startRepl(TurnState state) {
         Scanner scanner = new Scanner(System.in);
         String userInput;
         Optional<InputCommand> inputCommand;
-        while (!scoreboard.isComplete()) {
+
+        while (!state.getScoreboard().isComplete()) {
             userInput = scanner.next();
             inputCommand = getFirstExecutableCommand(userInput);
             if (inputCommand.isPresent()) {
-                numberOfRolls = executeCommand(scoreboard, dice, inputCommand, userInput, numberOfRolls);
+                executeCommand(inputCommand, userInput, state);
             }
         }
     }
@@ -63,20 +72,19 @@ public class CoreService {
         inputCommands.add(new ShowScoreboardCommand());
     }
 
-    public int executeCommand(Scoreboard scoreboard, List<Die> dice, Optional<InputCommand> inputCommand, String userInput, int numberOfRolls) {
+    public void executeCommand(Optional<InputCommand> inputCommand, String userInput, TurnState turnState) {
         try {
-            inputCommand.get().execute(scoreboard, dice, userInput, numberOfRolls);
+            inputCommand.get().execute(userInput, turnState);
             if (inputCommand.get().isRoll()) {
-                numberOfRolls++;
+                turnState.setNumberOfRolls(turnState.getNumberOfRolls() + 1);
             }
             if (inputCommand.get().isTurnEndCommand()) {
-                dice.forEach(Die::unlock);
-                numberOfRolls = 0;
+                turnState.getDice().forEach(Die::unlock);
+                turnState.setNumberOfRolls(0);
             }
         } catch (InputException e) {
             System.out.println(e.getMessage());
         }
-        return numberOfRolls;
     }
 
     private Optional<InputCommand> getFirstExecutableCommand(String userInput) {

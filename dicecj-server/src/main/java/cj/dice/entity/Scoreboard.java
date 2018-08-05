@@ -21,12 +21,15 @@ public class Scoreboard {
 
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "SCOREBOARD_SCORE", joinColumns = @JoinColumn(name = "SCOREBOARD_ID"),
+    @JoinTable(name = "SCOREBOARD_CLOSEDSCORE", joinColumns = @JoinColumn(name = "SCOREBOARD_ID"),
             inverseJoinColumns = @JoinColumn(name = "SCORE_ID"))
     @OrderBy(value = "index")
     private SortedSet<Score> closedScores;
 
-    @Transient
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "SCOREBOARD_OPENSCORE", joinColumns = @JoinColumn(name = "SCOREBOARD_ID"),
+            inverseJoinColumns = @JoinColumn(name = "SCORE_ID"))
+    @OrderBy(value = "index")
     private List<Score> openScores;
 
     public Scoreboard() {

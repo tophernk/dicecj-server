@@ -7,7 +7,9 @@ import javax.inject.Inject;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 import javax.json.bind.config.PropertyVisibilityStrategy;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -20,21 +22,9 @@ public class PlayerResource {
     private PlayerService playerService;
 
     @Path("/player")
-    @GET
-    public String player() {
-        Player cj = playerService.findPlayerByName("CJ");
-
-        JsonbConfig config = new JsonbConfig().withPropertyVisibilityStrategy(new PropertyVisibilityStrategy() {
-            @Override
-            public boolean isVisible(Field field) {
-                return true;
-            }
-
-            @Override
-            public boolean isVisible(Method method) {
-                return false;
-            }
-        });
-        return JsonbBuilder.create(config).toJson(cj);
+    @POST
+    public String player(String playerName) {
+        Player player = playerService.findPlayerByName(playerName);
+        return player != null ? player.getName() + "has been found" : playerName + "has not been found";
     }
 }

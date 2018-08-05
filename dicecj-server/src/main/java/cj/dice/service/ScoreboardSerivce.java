@@ -3,10 +3,12 @@ package cj.dice.service;
 import cj.dice.Die;
 import cj.dice.entity.*;
 
+import javax.ejb.Stateless;
 import java.text.DateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Stateless
 public class ScoreboardSerivce {
 
     private static final int BONUS_VALUE = 35;

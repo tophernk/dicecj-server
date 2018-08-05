@@ -1,15 +1,19 @@
 package cj.dice.command;
 
-import cj.dice.Die;
-import cj.dice.entity.Scoreboard;
+import cj.dice.service.ScoreboardSerivce;
 import cj.dice.service.ServiceSupport;
+import cj.dice.service.TurnState;
 
-import java.util.List;
+import javax.inject.Inject;
 
 public class ShowScoreboardCommand implements InputCommand {
+
+    @Inject
+    private ScoreboardSerivce scoreboardSerivce;
+
     @Override
-    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput, int numberOfRolls) {
-        ServiceSupport.getScoreboardSerivce().printScores(scoreboard);
+    public void execute(String userInput, TurnState turnState) {
+        scoreboardSerivce.printScores(turnState.getScoreboard());
     }
 
     @Override

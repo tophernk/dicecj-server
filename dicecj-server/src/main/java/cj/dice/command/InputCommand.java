@@ -1,14 +1,11 @@
 package cj.dice.command;
 
-import cj.dice.Die;
 import cj.dice.InputException;
-import cj.dice.entity.Scoreboard;
-
-import java.util.List;
+import cj.dice.service.TurnState;
 
 public interface InputCommand {
 
-    public void execute(Scoreboard scoreboard, List<Die> dice, String userInput, int numberOfRolls) throws InputException;
+    public void execute(String userInput, TurnState turnState) throws InputException;
 
     public boolean isTurnEndCommand();
 
