@@ -39,7 +39,7 @@ public class ScoreboardSerivce {
         return total + calculateBonus(scoreboard);
     }
 
-    public void printScores(Scoreboard scoreboard) {
+    public String printScores(Scoreboard scoreboard) {
         SortedSet<Score> scores = new TreeSet<>(Comparator.comparingInt(Score::getIndex));
         scores.addAll(scoreboard.getOpenScores());
         scores.addAll(scoreboard.getClosedScores());
@@ -56,7 +56,7 @@ public class ScoreboardSerivce {
                 .append("Total: ")
                 .append(getTotal(scoreboard));
 
-        System.out.println(result.toString());
+        return result.toString();
     }
 
     public Scoreboard buildScoreboard(Player player) {

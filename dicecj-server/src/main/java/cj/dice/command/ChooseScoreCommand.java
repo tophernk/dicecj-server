@@ -31,11 +31,13 @@ public class ChooseScoreCommand implements Promptable {
     }
 
     @Override
-    public void execute(String userInput, Turn turn) throws InputException {
+    public String execute(String userInput, Turn turn) throws InputException {
         try {
             List<Score> scoringOptions = turn.getScoreboard().getOpenScores();
-            scoreboardSerivce.addScore(turn.getScoreboard(), scoringOptions.get(Integer.valueOf(userInput)), turn.getDice());
+            Score score = scoringOptions.get(Integer.valueOf(userInput));
+            scoreboardSerivce.addScore(turn.getScoreboard(), score, turn.getDice());
             turn.getDice().forEach(Die::reset);
+            return score.getName() + "added to scoreboard";
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             throw new InputException("reset entity selection: no entity has been added to the scoreboard");
         }

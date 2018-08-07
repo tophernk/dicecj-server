@@ -5,7 +5,7 @@ import cj.dice.entity.Turn;
 
 public interface InputCommand {
 
-    public void execute(String userInput, Turn turn) throws InputException;
+    public String execute(String userInput, Turn turn) throws InputException;
 
     public boolean isTurnEndCommand();
 

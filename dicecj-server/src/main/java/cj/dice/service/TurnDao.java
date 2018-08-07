@@ -17,6 +17,15 @@ public class TurnDao extends AbstractDao {
     @PersistenceContext
     EntityManager entityManager;
 
+    public Turn findTurnById(int id) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Turn> query = criteriaBuilder.createQuery(Turn.class);
+        Root<Turn> root = query.from(Turn.class);
+        query.select(root);
+        query.where(criteriaBuilder.equal(root.get(Turn_.ID), id));
+        return entityManager.createQuery(query).getSingleResult();
+    }
+
     public Turn findTurnByPlayer(String playerName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Turn> query = criteriaBuilder.createQuery(Turn.class);
@@ -25,8 +34,7 @@ public class TurnDao extends AbstractDao {
         Join<Scoreboard, Player> playerJoin = scoreboardJoin.join(Scoreboard_.player);
         query.select(root);
         query.where(criteriaBuilder.equal(playerJoin.get(Player_.NAME), playerName));
-        TypedQuery<Turn> typedQuery = entityManager.createQuery(query);
-        return typedQuery.getSingleResult();
+        return entityManager.createQuery(query).getSingleResult();
     }
 
     public void createTurn(Turn turn) {

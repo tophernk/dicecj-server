@@ -3,16 +3,18 @@ package cj.dice.command;
 import cj.dice.service.ScoreboardSerivce;
 import cj.dice.entity.Turn;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+@Stateless
 public class ShowScoreboardCommand implements InputCommand {
 
     @Inject
     private ScoreboardSerivce scoreboardSerivce;
 
     @Override
-    public void execute(String userInput, Turn turn) {
-        scoreboardSerivce.printScores(turn.getScoreboard());
+    public String execute(String userInput, Turn turn) {
+        return scoreboardSerivce.printScores(turn.getScoreboard());
     }
 
     @Override

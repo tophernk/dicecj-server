@@ -3,20 +3,26 @@ package cj.dice.command;
 import cj.dice.InputException;
 import cj.dice.entity.Turn;
 
+import javax.ejb.Stateless;
+
+@Stateless
 public class CancelCommand implements InputCommand {
 
     private Promptable baseCommand;
+
+    public CancelCommand() {
+    }
 
     public CancelCommand(Promptable baseCommand) {
         this.baseCommand = baseCommand;
     }
     @Override
-    public void execute(String userInput, Turn turn) throws InputException {
+    public String execute(String userInput, Turn turn) throws InputException {
         String userInputFromPrompt = baseCommand.prompt(turn.getScoreboard(), turn.getDice());
         if (userInputFromPrompt.equals("c")) {
             throw new InputException("command has been canceled");
         }
-        baseCommand.execute(userInputFromPrompt, turn);
+        return baseCommand.execute(userInputFromPrompt, turn);
     }
 
     @Override
@@ -39,4 +45,11 @@ public class CancelCommand implements InputCommand {
         return baseCommand.isRoll();
     }
 
+    public Promptable getBaseCommand() {
+        return baseCommand;
+    }
+
+    public void setBaseCommand(Promptable baseCommand) {
+        this.baseCommand = baseCommand;
+    }
 }

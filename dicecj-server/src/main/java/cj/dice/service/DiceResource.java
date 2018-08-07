@@ -1,5 +1,6 @@
 package cj.dice.service;
 
+import cj.dice.command.InputCommand;
 import cj.dice.entity.Player;
 import cj.dice.entity.Scoreboard;
 import cj.dice.entity.Turn;
@@ -9,8 +10,8 @@ import javax.inject.Inject;
 import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Stateless
 @Path("/command")
@@ -39,17 +40,77 @@ public class DiceResource {
             turn = coreService.initTurn(player);
             turnDao.createTurn(turn);
         }
-
-//        return JsonbBuilder.create().toJson(turn);
-        return turn.toString();
+        String result = coreService.retrieveInstructions();
+        return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result, turn.getScoreboard().isComplete()));
     }
 
     @POST
-    public String command(String playerName) {
-        turnDao.findTurnByPlayer(playerName);
-        Turn turn = new Turn(new Scoreboard(), new ArrayList<>(), 0);
-        return "command received";
-//        return JsonbBuilder.create().toJson(turn);
+    public String command(String commandRequest) {
+        CommandRequest request = JsonbBuilder.create().fromJson(commandRequest, CommandRequest.class);
+        Turn turn = turnDao.findTurnById(request.getTurnId());
+        Optional<InputCommand> inputCommand = coreService.getFirstExecutableCommand(request.getUserInput());
+        String result = null;
+        if (inputCommand.isPresent()) {
+            result = coreService.executeCommand(inputCommand, request.getUserInput(), turn);
+        }
+        return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result, turn.getScoreboard().isComplete()));
+    }
+
+    public static class CommandRequest {
+        private int turnId;
+        private String userInput;
+
+        public int getTurnId() {
+            return turnId;
+        }
+
+        public void setTurnId(int turnId) {
+            this.turnId = turnId;
+        }
+
+        public String getUserInput() {
+            return userInput;
+        }
+
+        public void setUserInput(String userInput) {
+            this.userInput = userInput;
+        }
+    }
+
+    public static class CommandResponse {
+        private int turnId;
+        private String result;
+        private boolean isComplete;
+
+        public CommandResponse(int turnId, String result, boolean isComplete) {
+            this.turnId = turnId;
+            this.result = result;
+            this.isComplete = isComplete;
+        }
+
+        public int getTurnId() {
+            return turnId;
+        }
+
+        public void setTurnId(int turnId) {
+            this.turnId = turnId;
+        }
+
+        public String getResult() {
+            return result;
+        }
+
+        public void setResult(String result) {
+            this.result = result;
+        }
+
+        public boolean isComplete() {
+            return isComplete;
+        }
+
+        public void setComplete(boolean complete) {
+            isComplete = complete;
+        }
     }
 
 }

@@ -3,19 +3,24 @@ package cj.dice.command;
 import cj.dice.entity.Die;
 import cj.dice.entity.Turn;
 
+import javax.ejb.Stateless;
+
+@Stateless
 public class RollDiceCommand implements InputCommand {
 
     private static final int ALLOWED_NUMBER_OF_ROLLS = 3;
 
     @Override
-    public void execute(String userInput, Turn turn) {
+    public String execute(String userInput, Turn turn) {
         if (turn.getNumberOfRolls() >= ALLOWED_NUMBER_OF_ROLLS) {
-            System.out.println("no more rolls left");
-            return;
+            return "no more rolls left";
         }
         turn.getDice().forEach(Die::roll);
-        turn.getDice().forEach(System.out::print);
-        System.out.println();
+        String result = "";
+        for (Die d : turn.getDice()) {
+            result += d.toString();
+        }
+        return result;
     }
 
     @Override

@@ -7,7 +7,9 @@ import cj.dice.entity.Player;
 import cj.dice.entity.Scoreboard;
 import cj.dice.entity.Turn;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +24,11 @@ public class CoreService {
 
     public static final int NUMBER_OF_DICE = 5;
 
-    private List<InputCommand> inputCommands = new ArrayList<>();
+    private List<InputCommand> inputCommands;
 
     public Scoreboard play(Player player) {
         initCommands();
-        printInstruction();
+        retrieveInstructions();
         Turn turn = initTurn(player);
         startRepl(turn);
         return turn.getScoreboard();
@@ -58,24 +60,26 @@ public class CoreService {
         }
     }
 
-    public void printInstruction() {
-        System.out.println("********");
-        System.out.println("INPUT INSTRUCTIONS");
-        System.out.println("--------");
-        inputCommands.forEach(c -> System.out.println(c.retrieveInstructions()));
-        System.out.println("********");
+    public String retrieveInstructions() {
+        StringBuilder stringBuilder = new StringBuilder("********\n")
+                .append("INPUT INSTRUCTIONS\n")
+                .append("--------\n");
+        inputCommands.forEach(c -> stringBuilder.append(c.retrieveInstructions() + "\n"));
+        return stringBuilder.append("********\n").toString();
     }
 
+    @PostConstruct
     private void initCommands() {
+        inputCommands = new ArrayList<>();
         inputCommands.add(new RollDiceCommand());
         inputCommands.add(new SelectDiceCommand());
         inputCommands.add(new CancelCommand(new ChooseScoreCommand()));
         inputCommands.add(new ShowScoreboardCommand());
     }
 
-    public void executeCommand(Optional<InputCommand> inputCommand, String userInput, Turn turn) {
+    public String executeCommand(Optional<InputCommand> inputCommand, String userInput, Turn turn) {
         try {
-            inputCommand.get().execute(userInput, turn);
+            String result = inputCommand.get().execute(userInput, turn);
             if (inputCommand.get().isRoll()) {
                 turn.setNumberOfRolls(turn.getNumberOfRolls() + 1);
             }
@@ -83,12 +87,13 @@ public class CoreService {
                 turn.getDice().forEach(Die::unlock);
                 turn.setNumberOfRolls(0);
             }
+            return  result;
         } catch (InputException e) {
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
     }
 
-    private Optional<InputCommand> getFirstExecutableCommand(String userInput) {
+    public Optional<InputCommand> getFirstExecutableCommand(String userInput) {
         return inputCommands.stream().filter(c -> c.isTrigger(userInput)).findFirst();
     }
 }
