@@ -1,6 +1,6 @@
 package cj.dice.command;
 
-import cj.dice.Die;
+import cj.dice.entity.Die;
 import cj.dice.InputException;
 import cj.dice.entity.Scoreboard;
 

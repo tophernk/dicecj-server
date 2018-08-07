@@ -1,8 +1,7 @@
 package cj.dice.command;
 
 import cj.dice.service.ScoreboardSerivce;
-import cj.dice.service.ServiceSupport;
-import cj.dice.service.TurnState;
+import cj.dice.entity.Turn;
 
 import javax.inject.Inject;
 
@@ -12,8 +11,8 @@ public class ShowScoreboardCommand implements InputCommand {
     private ScoreboardSerivce scoreboardSerivce;
 
     @Override
-    public void execute(String userInput, TurnState turnState) {
-        scoreboardSerivce.printScores(turnState.getScoreboard());
+    public void execute(String userInput, Turn turn) {
+        scoreboardSerivce.printScores(turn.getScoreboard());
     }
 
     @Override

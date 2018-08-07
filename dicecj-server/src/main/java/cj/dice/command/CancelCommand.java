@@ -1,7 +1,7 @@
 package cj.dice.command;
 
 import cj.dice.InputException;
-import cj.dice.service.TurnState;
+import cj.dice.entity.Turn;
 
 public class CancelCommand implements InputCommand {
 
@@ -11,12 +11,12 @@ public class CancelCommand implements InputCommand {
         this.baseCommand = baseCommand;
     }
     @Override
-    public void execute(String userInput, TurnState turnState) throws InputException {
-        String userInputFromPrompt = baseCommand.prompt(turnState.getScoreboard(), turnState.getDice());
+    public void execute(String userInput, Turn turn) throws InputException {
+        String userInputFromPrompt = baseCommand.prompt(turn.getScoreboard(), turn.getDice());
         if (userInputFromPrompt.equals("c")) {
             throw new InputException("command has been canceled");
         }
-        baseCommand.execute(userInputFromPrompt, turnState);
+        baseCommand.execute(userInputFromPrompt, turn);
     }
 
     @Override

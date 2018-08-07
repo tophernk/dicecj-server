@@ -1,9 +1,7 @@
 package cj.dice.entity;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import java.util.SortedSet;
+import java.util.*;
 
 @Entity
 public class Scoreboard {
@@ -19,18 +17,17 @@ public class Scoreboard {
     @JoinColumn(name = "PLAYER_ID")
     private Player player;
 
-
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "SCOREBOARD_CLOSEDSCORE", joinColumns = @JoinColumn(name = "SCOREBOARD_ID"),
             inverseJoinColumns = @JoinColumn(name = "SCORE_ID"))
     @OrderBy(value = "index")
-    private SortedSet<Score> closedScores;
+    private SortedSet<Score> closedScores = new TreeSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "SCOREBOARD_OPENSCORE", joinColumns = @JoinColumn(name = "SCOREBOARD_ID"),
             inverseJoinColumns = @JoinColumn(name = "SCORE_ID"))
     @OrderBy(value = "index")
-    private List<Score> openScores;
+    private List<Score> openScores = new ArrayList<>();
 
     public Scoreboard() {
     }

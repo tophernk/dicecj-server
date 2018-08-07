@@ -1,15 +1,19 @@
 package cj.dice.service;
 
-import cj.dice.Die;
+import cj.dice.entity.Die;
 import cj.dice.entity.*;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import java.text.DateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Stateless
 public class ScoreboardSerivce {
+
+    @Inject
+    private ScoreboardDao scoreboardDao;
 
     private static final int BONUS_VALUE = 35;
 
@@ -116,7 +120,7 @@ public class ScoreboardSerivce {
     }
 
     public List<Scoreboard> findScoreboardsByPlayer(Player player) {
-        List<Scoreboard> scoreboardsByPlayer = new ScoreboardDao().findScoreboardsByPlayer(player);
+        List<Scoreboard> scoreboardsByPlayer = scoreboardDao.findScoreboardsByPlayer(player);
         scoreboardsByPlayer.sort((s1, s2) -> Integer.compare(getTotal(s1), getTotal(s2)) * -1);
         return scoreboardsByPlayer;
     }
@@ -133,6 +137,6 @@ public class ScoreboardSerivce {
     }
 
     public void save(Scoreboard scoreboard) {
-        new ScoreboardDao().create(scoreboard);
+        scoreboardDao.create(scoreboard);
     }
 }

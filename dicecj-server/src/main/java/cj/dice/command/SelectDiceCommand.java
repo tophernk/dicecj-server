@@ -1,19 +1,19 @@
 package cj.dice.command;
 
 import cj.dice.service.CoreService;
-import cj.dice.service.TurnState;
+import cj.dice.entity.Turn;
 
 public class SelectDiceCommand implements InputCommand {
     @Override
-    public void execute(String userInput, TurnState turnState) {
+    public void execute(String userInput, Turn turn) {
         char[] chars = userInput.toCharArray();
         for (int x = 0; x < chars.length; x++) {
             int numericValue = Character.getNumericValue(chars[x]);
             if (numericValue > 0 && numericValue <= CoreService.NUMBER_OF_DICE) {
-                turnState.getDice().get(numericValue - 1).toggleLock();
+                turn.getDice().get(numericValue - 1).toggleLock();
             }
         }
-        turnState.getDice().forEach(System.out::print);
+        turn.getDice().forEach(System.out::print);
         System.out.println();
     }
 

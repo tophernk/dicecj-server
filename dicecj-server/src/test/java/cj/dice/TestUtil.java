@@ -1,6 +1,6 @@
 package cj.dice;
 
-import cj.dice.Die;
+import cj.dice.entity.Die;
 
 import java.util.ArrayList;
 import java.util.List;

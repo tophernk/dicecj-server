@@ -1,5 +1,7 @@
 package cj.dice;
 
+import cj.dice.entity.Die;
+
 import java.util.List;
 
 public class DiceUtil {

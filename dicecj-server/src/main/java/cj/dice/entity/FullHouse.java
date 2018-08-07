@@ -1,7 +1,5 @@
 package cj.dice.entity;
 
-import cj.dice.Die;
-
 import javax.persistence.Entity;
 import java.util.HashMap;
 import java.util.List;

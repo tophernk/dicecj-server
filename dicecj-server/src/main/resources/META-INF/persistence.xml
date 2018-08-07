@@ -3,7 +3,7 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
-    <persistence-unit name="DiceCJ" transaction-type="JTA">
+    <persistence-unit name="dicecj" transaction-type="JTA">
         <jta-data-source>jdbc/MyDerbyResource</jta-data-source>
 
         <class>cj.dice.entity.Player</class>
@@ -19,6 +19,8 @@
         <class>cj.dice.entity.Straight</class>
         <class>cj.dice.entity.Chance</class>
         <class>cj.dice.entity.Scoreboard</class>
+        <class>cj.dice.entity.Turn</class>
+        <class>cj.dice.entity.Die</class>
 
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/dicecjdb"/>

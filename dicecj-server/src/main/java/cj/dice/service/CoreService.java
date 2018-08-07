@@ -1,10 +1,11 @@
 package cj.dice.service;
 
-import cj.dice.Die;
+import cj.dice.entity.Die;
 import cj.dice.InputException;
 import cj.dice.command.*;
 import cj.dice.entity.Player;
 import cj.dice.entity.Scoreboard;
+import cj.dice.entity.Turn;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -26,13 +27,13 @@ public class CoreService {
     public Scoreboard play(Player player) {
         initCommands();
         printInstruction();
-        TurnState turnState = initTurn(player);
-        startRepl(turnState);
-        return turnState.getScoreboard();
+        Turn turn = initTurn(player);
+        startRepl(turn);
+        return turn.getScoreboard();
     }
 
-    public TurnState initTurn(Player player) {
-        return new TurnState(scoreboardSerivce.buildScoreboard(player), initDice(), 0);
+    public Turn initTurn(Player player) {
+        return new Turn(scoreboardSerivce.buildScoreboard(player), initDice(), 0);
     }
 
     private List<Die> initDice() {
@@ -43,7 +44,7 @@ public class CoreService {
         return dice;
     }
 
-    private void startRepl(TurnState state) {
+    private void startRepl(Turn state) {
         Scanner scanner = new Scanner(System.in);
         String userInput;
         Optional<InputCommand> inputCommand;
@@ -72,15 +73,15 @@ public class CoreService {
         inputCommands.add(new ShowScoreboardCommand());
     }
 
-    public void executeCommand(Optional<InputCommand> inputCommand, String userInput, TurnState turnState) {
+    public void executeCommand(Optional<InputCommand> inputCommand, String userInput, Turn turn) {
         try {
-            inputCommand.get().execute(userInput, turnState);
+            inputCommand.get().execute(userInput, turn);
             if (inputCommand.get().isRoll()) {
-                turnState.setNumberOfRolls(turnState.getNumberOfRolls() + 1);
+                turn.setNumberOfRolls(turn.getNumberOfRolls() + 1);
             }
             if (inputCommand.get().isTurnEndCommand()) {
-                turnState.getDice().forEach(Die::unlock);
-                turnState.setNumberOfRolls(0);
+                turn.getDice().forEach(Die::unlock);
+                turn.setNumberOfRolls(0);
             }
         } catch (InputException e) {
             System.out.println(e.getMessage());

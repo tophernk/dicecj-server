@@ -1,12 +1,11 @@
 package cj.dice.command;
 
-import cj.dice.Die;
+import cj.dice.entity.Die;
 import cj.dice.InputException;
 import cj.dice.entity.Score;
 import cj.dice.entity.Scoreboard;
 import cj.dice.service.ScoreboardSerivce;
-import cj.dice.service.ServiceSupport;
-import cj.dice.service.TurnState;
+import cj.dice.entity.Turn;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -32,11 +31,11 @@ public class ChooseScoreCommand implements Promptable {
     }
 
     @Override
-    public void execute(String userInput, TurnState turnState) throws InputException {
+    public void execute(String userInput, Turn turn) throws InputException {
         try {
-            List<Score> scoringOptions = turnState.getScoreboard().getOpenScores();
-            scoreboardSerivce.addScore(turnState.getScoreboard(), scoringOptions.get(Integer.valueOf(userInput)), turnState.getDice());
-            turnState.getDice().forEach(Die::reset);
+            List<Score> scoringOptions = turn.getScoreboard().getOpenScores();
+            scoreboardSerivce.addScore(turn.getScoreboard(), scoringOptions.get(Integer.valueOf(userInput)), turn.getDice());
+            turn.getDice().forEach(Die::reset);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             throw new InputException("reset entity selection: no entity has been added to the scoreboard");
         }

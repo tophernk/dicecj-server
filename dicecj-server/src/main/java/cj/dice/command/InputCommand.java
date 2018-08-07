@@ -1,11 +1,11 @@
 package cj.dice.command;
 
 import cj.dice.InputException;
-import cj.dice.service.TurnState;
+import cj.dice.entity.Turn;
 
 public interface InputCommand {
 
-    public void execute(String userInput, TurnState turnState) throws InputException;
+    public void execute(String userInput, Turn turn) throws InputException;
 
     public boolean isTurnEndCommand();
 

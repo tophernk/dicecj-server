@@ -1,13 +1,22 @@
-package cj.dice;
+package cj.dice.entity;
 
+import javax.persistence.*;
 import java.util.Random;
 
+@Entity
 public class Die {
 
     private static final int RESET_VALUE = Integer.MAX_VALUE;
     private static final int UPPER_BOUND = 6;
     private static final Random NUMBER_GENERATOR = new Random();
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private int value;
+
+    @Column(name = "IS_LOCKED")
     private boolean locked;
 
     public Die() {
@@ -60,5 +69,13 @@ public class Die {
     public String toString() {
         String out = value == RESET_VALUE ? "x" : Integer.toString(value);
         return isLocked() ? "[" + out + "]" : out;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
