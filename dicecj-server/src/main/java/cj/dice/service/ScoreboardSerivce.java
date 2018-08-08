@@ -17,10 +17,6 @@ public class ScoreboardSerivce {
 
     private static final int BONUS_VALUE = 35;
 
-    public List<Scoreboard> findScoreboards() {
-        return null;
-    }
-
     public boolean addScore(Scoreboard scoreboard, Score score, List<Die> dice) {
         if (!scoreboard.getOpenScores().contains(score)) {
             return false;
@@ -42,7 +38,9 @@ public class ScoreboardSerivce {
     public String printScores(Scoreboard scoreboard) {
         SortedSet<Score> scores = new TreeSet<>(Comparator.comparingInt(Score::getIndex));
         scores.addAll(scoreboard.getOpenScores());
-        scores.addAll(scoreboard.getClosedScores());
+        if (scoreboard.getClosedScores() != null) {
+            scores.addAll(scoreboard.getClosedScores());
+        }
 
         StringBuilder result = new StringBuilder();
 
@@ -84,7 +82,7 @@ public class ScoreboardSerivce {
 
         scoreboard.getOpenScores().forEach(s -> s.setIndex(scoreboard.getOpenScores().indexOf(s)));
 
-        return  scoreboard;
+        return scoreboard;
     }
 
     public void printOneLine(Scoreboard scoreboard) {
@@ -93,6 +91,9 @@ public class ScoreboardSerivce {
     }
 
     public int calculateBonus(Scoreboard scoreboard) {
+        if (scoreboard.getClosedScores() == null) {
+            return 0;
+        }
         SortedSet<Score> scores = new TreeSet<>(Comparator.comparingInt(Score::getIndex));
         if (scoreboard.getOpenScores() != null) {
             scores.addAll(scoreboard.getOpenScores());
@@ -111,6 +112,9 @@ public class ScoreboardSerivce {
     }
 
     public int calculateCurrentDiffToRegularBonus(Scoreboard scoreboard) {
+        if (scoreboard.getClosedScores() == null) {
+            return 0;
+        }
         Set<Score> closedFaceValueScores = scoreboard.getClosedScores().stream().filter(s -> s instanceof FaceValueOfAKindScore).collect(Collectors.toSet());
         int currentDiffToRegularBons = 0;
         for (Score score : closedFaceValueScores) {

@@ -30,8 +30,8 @@ public class TurnDao extends AbstractDao {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Turn> query = criteriaBuilder.createQuery(Turn.class);
         Root<Turn> root = query.from(Turn.class);
-        Join<Turn, Scoreboard> scoreboardJoin = root.join(Turn_.scoreboard);
-        Join<Scoreboard, Player> playerJoin = scoreboardJoin.join(Scoreboard_.player);
+        Join<Turn, Scoreboard> scoreboardJoin = root.join(Turn_.SCOREBOARD);
+        Join<Scoreboard, Player> playerJoin = scoreboardJoin.join(Scoreboard_.PLAYER);
         query.select(root);
         query.where(criteriaBuilder.equal(playerJoin.get(Player_.NAME), playerName));
         return entityManager.createQuery(query).getSingleResult();

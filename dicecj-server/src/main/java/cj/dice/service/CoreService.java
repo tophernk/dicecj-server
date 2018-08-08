@@ -74,7 +74,6 @@ public class CoreService {
         inputCommands.add(new RollDiceCommand());
         inputCommands.add(new SelectDiceCommand());
         inputCommands.add(new CancelCommand(new ChooseScoreCommand()));
-        inputCommands.add(new ShowScoreboardCommand());
     }
 
     public String executeCommand(Optional<InputCommand> inputCommand, String userInput, Turn turn) {

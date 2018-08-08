@@ -41,7 +41,8 @@ public class DiceResource {
             turnDao.createTurn(turn);
         }
         String result = coreService.retrieveInstructions();
-        return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result, turn.getScoreboard().isComplete()));
+        return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result,
+                turn.getScoreboard().isComplete(), scoreboardSerivce.printScores(turn.getScoreboard())));
     }
 
     @POST
@@ -53,7 +54,8 @@ public class DiceResource {
         if (inputCommand.isPresent()) {
             result = coreService.executeCommand(inputCommand, request.getUserInput(), turn);
         }
-        return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result, turn.getScoreboard().isComplete()));
+        return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result,
+                turn.getScoreboard().isComplete(), scoreboardSerivce.printScores(turn.getScoreboard())));
     }
 
     public static class CommandRequest {
@@ -82,10 +84,14 @@ public class DiceResource {
         private String result;
         private boolean isComplete;
 
-        public CommandResponse(int turnId, String result, boolean isComplete) {
+
+        private String scoreboard;
+
+        public CommandResponse(int turnId, String result, boolean isComplete, String scoreboard) {
             this.turnId = turnId;
             this.result = result;
             this.isComplete = isComplete;
+            this.scoreboard = scoreboard;
         }
 
         public int getTurnId() {
@@ -110,6 +116,14 @@ public class DiceResource {
 
         public void setComplete(boolean complete) {
             isComplete = complete;
+        }
+
+        public String getScoreboard() {
+            return scoreboard;
+        }
+
+        public void setScoreboard(String scoreboard) {
+            this.scoreboard = scoreboard;
         }
     }
 

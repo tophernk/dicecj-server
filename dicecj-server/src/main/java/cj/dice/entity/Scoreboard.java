@@ -21,7 +21,7 @@ public class Scoreboard {
     @JoinTable(name = "SCOREBOARD_CLOSEDSCORE", joinColumns = @JoinColumn(name = "SCOREBOARD_ID"),
             inverseJoinColumns = @JoinColumn(name = "SCORE_ID"))
     @OrderBy(value = "index")
-    private SortedSet<Score> closedScores = new TreeSet<>();
+    private TreeSet<Score> closedScores = new TreeSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "SCOREBOARD_OPENSCORE", joinColumns = @JoinColumn(name = "SCOREBOARD_ID"),
@@ -68,11 +68,11 @@ public class Scoreboard {
         this.openScores = openScores;
     }
 
-    public SortedSet<Score> getClosedScores() {
+    public TreeSet<Score> getClosedScores() {
         return closedScores;
     }
 
-    public void setClosedScores(SortedSet<Score> closedScores) {
+    public void setClosedScores(TreeSet<Score> closedScores) {
         this.closedScores = closedScores;
     }
 }

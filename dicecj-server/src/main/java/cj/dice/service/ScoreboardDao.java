@@ -22,7 +22,7 @@ public class ScoreboardDao extends AbstractDao {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Scoreboard> query = criteriaBuilder.createQuery(Scoreboard.class);
         Root<Scoreboard> root = query.from(Scoreboard.class);
-        query.where(criteriaBuilder.equal(root.get(Scoreboard_.player), player));
+        query.where(criteriaBuilder.equal(root.get(Scoreboard_.PLAYER), player));
         query.select(root);
         TypedQuery<Scoreboard> typedQuery = entityManager.createQuery(query);
         return typedQuery.getResultList();
