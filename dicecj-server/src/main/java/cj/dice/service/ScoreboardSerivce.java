@@ -44,7 +44,10 @@ public class ScoreboardSerivce {
 
         StringBuilder result = new StringBuilder();
 
-        scores.forEach((s) -> result.append(s.getName())
+        scores.forEach((s) -> result
+                .append(s.getIndex())
+                .append(" ")
+                .append(s.getName())
                 .append(": ")
                 .append(s.getValue())
                 .append("\n"));
