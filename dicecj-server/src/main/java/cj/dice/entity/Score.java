@@ -16,9 +16,6 @@ public abstract class Score implements Comparable<Score> {
 
     private int index;
 
-    @Transient
-    private int fixedValue;
-
     public Score() {
     }
 
@@ -26,17 +23,8 @@ public abstract class Score implements Comparable<Score> {
         this.name = name;
     }
 
-    public Score(String name, int value) {
-        this(name);
-        this.fixedValue = value;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public int getFixedValue() {
-        return fixedValue;
     }
 
     public abstract int evaluate(List<Die> dice);

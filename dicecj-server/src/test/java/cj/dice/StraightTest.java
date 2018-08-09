@@ -1,5 +1,6 @@
 package cj.dice;
 
+import cj.dice.entity.SmallStraight;
 import cj.dice.entity.Straight;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,7 +11,7 @@ public class StraightTest {
     public void evaluateBigStraight() {
         final int straightValue = 40;
 
-        Straight straight = new Straight(5, straightValue, "Big Straight");
+        Straight straight = new Straight();
 
         Assert.assertEquals(straightValue, straight.evaluate(TestUtil.createDice(1, 2, 3, 4, 5)));
         Assert.assertEquals(straightValue, straight.evaluate(TestUtil.createDice(2, 3, 4, 5, 6)));
@@ -22,7 +23,7 @@ public class StraightTest {
     public void evaluateSmallStraight() {
         final int straightValue = 30;
 
-        Straight straight = new Straight(4, straightValue, "Small Straight");
+        Straight straight = new SmallStraight();
 
         Assert.assertEquals(straightValue, straight.evaluate(TestUtil.createDice(1, 2, 3, 4, 6)));
         Assert.assertEquals(straightValue, straight.evaluate(TestUtil.createDice(2, 3, 4, 5, 5)));

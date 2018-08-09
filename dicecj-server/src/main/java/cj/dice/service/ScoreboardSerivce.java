@@ -75,12 +75,12 @@ public class ScoreboardSerivce {
         scoreboard.getOpenScores().add(new FourFaceScore());
         scoreboard.getOpenScores().add(new FiveFaceScore());
         scoreboard.getOpenScores().add(new SixFaceScore());
-        scoreboard.getOpenScores().add(new OfAKindScore(3, "Three of a kind"));
-        scoreboard.getOpenScores().add(new OfAKindScore(4, "Four of a kind"));
+        scoreboard.getOpenScores().add(new ThreeOfAKind());
+        scoreboard.getOpenScores().add(new FourOfAKind());
         scoreboard.getOpenScores().add(new FullHouse());
-        scoreboard.getOpenScores().add(new Straight(4, 30, "Small Straight"));
-        scoreboard.getOpenScores().add(new Straight(5, 40, "Straight"));
-        scoreboard.getOpenScores().add(new OfAKindScore(5, 50, "Five of a kind"));
+        scoreboard.getOpenScores().add(new SmallStraight());
+        scoreboard.getOpenScores().add(new Straight());
+        scoreboard.getOpenScores().add(new Yahtzee());
         scoreboard.getOpenScores().add(new Chance());
 
         scoreboard.getOpenScores().forEach(s -> s.setIndex(scoreboard.getOpenScores().indexOf(s)));

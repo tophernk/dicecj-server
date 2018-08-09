@@ -33,7 +33,6 @@ public class DiceResource {
     @Path("/newgame")
     public String newGame(String playerName) {
         Player player = playerService.findOrCreatePlayer(playerName);
-        List<Scoreboard> scoreboardsByPlayer = scoreboardSerivce.findScoreboardsByPlayer(player);
 
         Turn turn = turnDao.findTurnByPlayer(playerName);
         if (turn == null) {
@@ -42,7 +41,8 @@ public class DiceResource {
         }
         String result = coreService.retrieveInstructions();
         return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result,
-                turn.getScoreboard().isComplete(), scoreboardSerivce.printScores(turn.getScoreboard())));
+                turn.getScoreboard().isComplete(), scoreboardSerivce.printScores(turn.getScoreboard()),
+                turn.getNumberOfRolls()));
     }
 
     @POST
@@ -54,8 +54,12 @@ public class DiceResource {
         if (inputCommand.isPresent()) {
             result = coreService.executeCommand(inputCommand, request.getUserInput(), turn);
         }
+        else {
+            result = "invalid input";
+        }
         return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result,
-                turn.getScoreboard().isComplete(), scoreboardSerivce.printScores(turn.getScoreboard())));
+                turn.getScoreboard().isComplete(), scoreboardSerivce.printScores(turn.getScoreboard()),
+                turn.getNumberOfRolls()));
     }
 
     public static class CommandRequest {
@@ -83,15 +87,15 @@ public class DiceResource {
         private int turnId;
         private String result;
         private boolean isComplete;
-
-
         private String scoreboard;
+        private int numberOfRolls;
 
-        public CommandResponse(int turnId, String result, boolean isComplete, String scoreboard) {
+        public CommandResponse(int turnId, String result, boolean isComplete, String scoreboard, int numberOfRolls) {
             this.turnId = turnId;
             this.result = result;
             this.isComplete = isComplete;
             this.scoreboard = scoreboard;
+            this.numberOfRolls = numberOfRolls;
         }
 
         public int getTurnId() {
@@ -124,6 +128,14 @@ public class DiceResource {
 
         public void setScoreboard(String scoreboard) {
             this.scoreboard = scoreboard;
+        }
+
+        public int getNumberOfRolls() {
+            return numberOfRolls;
+        }
+
+        public void setNumberOfRolls(int numberOfRolls) {
+            this.numberOfRolls = numberOfRolls;
         }
     }
 

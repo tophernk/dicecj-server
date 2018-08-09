@@ -1,5 +1,6 @@
 package cj.dice.command;
 
+import cj.dice.InputException;
 import cj.dice.entity.Die;
 import cj.dice.entity.Turn;
 
@@ -11,9 +12,9 @@ public class RollDiceCommand implements InputCommand {
     private static final int ALLOWED_NUMBER_OF_ROLLS = 3;
 
     @Override
-    public String execute(String userInput, Turn turn) {
+    public String execute(String userInput, Turn turn) throws InputException {
         if (turn.getNumberOfRolls() >= ALLOWED_NUMBER_OF_ROLLS) {
-            return "no more rolls left";
+            throw new InputException("no more rolls left");
         }
         turn.getDice().forEach(Die::roll);
         String result = "";

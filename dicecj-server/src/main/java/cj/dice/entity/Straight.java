@@ -9,22 +9,24 @@ import java.util.List;
 @Entity
 public class Straight extends Score {
 
-    @Transient
-    private int requiredLength;
-
-    public Straight() {
+    @Override
+    public String getName() {
+        return "Straight";
     }
 
-    public Straight(int length, int value, String name) {
-        super(name, value);
-        this.requiredLength = length;
+    protected int getRequiredLength() {
+        return 5;
+    }
+
+    protected int getFixedValue() {
+        return 40;
     }
 
     @Override
     public int evaluate(List<Die> dice) {
         List<Die> diceCopy = new ArrayList<>(dice);
         diceCopy.sort(Comparator.comparingInt(Die::getValue));
-        return determineStraightLength(diceCopy) >= requiredLength ? getFixedValue() : 0;
+        return determineStraightLength(diceCopy) >= getRequiredLength() ? getFixedValue() : 0;
     }
 
     private int determineStraightLength(List<Die> dice) {

@@ -10,36 +10,28 @@ import cj.dice.entity.Turn;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 @Stateless
-public class ChooseScoreCommand implements Promptable {
+public class ChooseScoreCommand implements InputCommand {
 
     @Inject
     private ScoreboardSerivce scoreboardSerivce;
 
     @Override
-    public String prompt(Scoreboard scoreboard, List<Die> dice) throws InputException {
-        if (dice.stream().anyMatch(d -> !d.isValid())) {
+    public String execute(String userInput, Turn turn) throws InputException {
+        if (turn.getDice().stream().anyMatch(d -> !d.isValid())) {
             throw new InputException("please (re)roll dice");
         }
-        List<Score> scoringOptions = scoreboard.getOpenScores();
-        for (Score s : scoringOptions) {
-            System.out.println(s.getName() + ": " + s.evaluate(dice) + " [" + scoringOptions.indexOf(s) + "]");
-        }
-        return new Scanner(System.in).next();
-    }
-
-    @Override
-    public String execute(String userInput, Turn turn) throws InputException {
         try {
             List<Score> scoringOptions = turn.getScoreboard().getOpenScores();
-            Score score = scoringOptions.get(Integer.valueOf(userInput));
+            Score score = scoringOptions.stream().filter(s -> s.getIndex() == Integer.valueOf(userInput.substring(1))).findAny().orElseThrow(IllegalArgumentException::new);
             scoreboardSerivce.addScore(turn.getScoreboard(), score, turn.getDice());
             turn.getDice().forEach(Die::reset);
-            return score.getName() + "added to scoreboard";
-        } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            throw new InputException("reset entity selection: no entity has been added to the scoreboard");
+            return score.getValue() + " added to " + score.getName();
+        } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
+            throw new InputException("invalid input");
         }
     }
 
@@ -50,7 +42,7 @@ public class ChooseScoreCommand implements Promptable {
 
     @Override
     public boolean isTrigger(String userInput) {
-        return userInput.equals("s");
+        return userInput.startsWith("s");
     }
 
     @Override

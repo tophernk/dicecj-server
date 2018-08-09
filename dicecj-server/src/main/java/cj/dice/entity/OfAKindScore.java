@@ -7,29 +7,17 @@ import javax.persistence.Transient;
 import java.util.List;
 
 @Entity
-public class OfAKindScore extends Score {
+public abstract class OfAKindScore extends Score {
 
-    @Transient
-    private int count;
+    public abstract int calculateValue(List<Die> dice);
 
-    public OfAKindScore() {
-    }
-
-    public OfAKindScore(int count, String name) {
-        super(name);
-        this.count = count;
-    }
-
-    public OfAKindScore(int count, int value, String name) {
-        super(name, value);
-        this.count = count;
-    }
+    public abstract int getCount();
 
     @Override
     public int evaluate(List<Die> dice) {
         for (Die die : dice) {
-            if(count(dice, die.getValue()) >= count) {
-                return getFixedValue() > 0 ? getFixedValue() : DiceUtil.sum(dice);
+            if(count(dice, die.getValue()) >= getCount()) {
+                return calculateValue(dice);
             }
         }
         return 0;

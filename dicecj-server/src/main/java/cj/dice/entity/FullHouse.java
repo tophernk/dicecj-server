@@ -8,15 +8,16 @@ import java.util.Map;
 @Entity
 public class FullHouse extends Score {
 
-    public FullHouse() {
-        super("Full House", 25);
+    @Override
+    public String getName() {
+        return "Full House";
     }
 
     @Override
     public int evaluate(List<Die> dice) {
         Map<Integer, Integer> dieCount = countDiceValues(dice);
         return (dieCount.values().contains(3) && dieCount.values().contains(2))
-                || dieCount.values().contains(5) ? getFixedValue() : 0;
+                || dieCount.values().contains(5) ? 25 : 0;
     }
 
     private Map<Integer, Integer> countDiceValues(List<Die> dice) {
