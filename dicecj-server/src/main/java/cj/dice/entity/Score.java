@@ -27,7 +27,9 @@ public abstract class Score implements Comparable<Score> {
         return name;
     }
 
-    public abstract int evaluate(List<Die> dice);
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getId() {
         return id;
@@ -52,6 +54,8 @@ public abstract class Score implements Comparable<Score> {
     public void setIndex(int index) {
         this.index = index;
     }
+
+    public abstract int evaluate(List<Die> dice);
 
     @Override
     public int compareTo(Score score) {

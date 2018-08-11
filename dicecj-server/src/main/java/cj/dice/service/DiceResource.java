@@ -1,16 +1,14 @@
 package cj.dice.service;
 
 import cj.dice.command.InputCommand;
+import cj.dice.entity.Game;
 import cj.dice.entity.Player;
-import cj.dice.entity.Scoreboard;
-import cj.dice.entity.Turn;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import java.util.List;
 import java.util.Optional;
 
 @Stateless
@@ -27,51 +25,56 @@ public class DiceResource {
     ScoreboardSerivce scoreboardSerivce;
 
     @Inject
-    private TurnDao turnDao;
+    private GameDao gameDao;
 
     @POST
     @Path("/newgame")
     public String newGame(String playerName) {
         Player player = playerService.findOrCreatePlayer(playerName);
 
-        Turn turn = turnDao.findTurnByPlayer(playerName);
-        if (turn == null) {
-            turn = coreService.initTurn(player);
-            turnDao.createTurn(turn);
-        }
+        Game game = coreService.initNewGame(player);
+        scoreboardSerivce.printAndHighlightScoreboardsOfPlayer(game.getScoreboard());
+
         String result = coreService.retrieveInstructions();
-        return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result,
-                turn.getScoreboard().isComplete(), scoreboardSerivce.printScores(turn.getScoreboard()),
-                turn.getNumberOfRolls()));
+        return JsonbBuilder.create().toJson(new CommandResponse(game.getId(), result,
+                game.getScoreboard().isComplete(), scoreboardSerivce.printScores(game.getScoreboard()),
+                game.getCurrentNumberOfRolls()));
     }
 
     @POST
     public String command(String commandRequest) {
         CommandRequest request = JsonbBuilder.create().fromJson(commandRequest, CommandRequest.class);
-        Turn turn = turnDao.findTurnById(request.getTurnId());
+        Game game = gameDao.findGameById(request.getGameId());
         Optional<InputCommand> inputCommand = coreService.getFirstExecutableCommand(request.getUserInput());
         String result = null;
         if (inputCommand.isPresent()) {
-            result = coreService.executeCommand(inputCommand, request.getUserInput(), turn);
+            result = coreService.executeCommand(inputCommand, request.getUserInput(), game);
         }
         else {
             result = "invalid input";
         }
-        return JsonbBuilder.create().toJson(new CommandResponse(turn.getId(), result,
-                turn.getScoreboard().isComplete(), scoreboardSerivce.printScores(turn.getScoreboard()),
-                turn.getNumberOfRolls()));
+        return JsonbBuilder.create().toJson(new CommandResponse(game.getId(), result,
+                game.getScoreboard().isComplete(), scoreboardSerivce.printScores(game.getScoreboard()),
+                game.getCurrentNumberOfRolls()));
+    }
+
+    @POST
+    @Path("/finishGame")
+    public String finishGame(String gameId) {
+        Game game = gameDao.findGameById(Integer.valueOf(gameId));
+        return scoreboardSerivce.printAndHighlightScoreboardsOfPlayer(game.getScoreboard());
     }
 
     public static class CommandRequest {
-        private int turnId;
+        private int gameId;
         private String userInput;
 
-        public int getTurnId() {
-            return turnId;
+        public int getGameId() {
+            return gameId;
         }
 
-        public void setTurnId(int turnId) {
-            this.turnId = turnId;
+        public void setGameId(int gameId) {
+            this.gameId = gameId;
         }
 
         public String getUserInput() {
@@ -84,26 +87,26 @@ public class DiceResource {
     }
 
     public static class CommandResponse {
-        private int turnId;
+        private int gameId;
         private String result;
         private boolean isComplete;
         private String scoreboard;
         private int numberOfRolls;
 
-        public CommandResponse(int turnId, String result, boolean isComplete, String scoreboard, int numberOfRolls) {
-            this.turnId = turnId;
+        public CommandResponse(int gameId, String result, boolean isComplete, String scoreboard, int numberOfRolls) {
+            this.gameId = gameId;
             this.result = result;
             this.isComplete = isComplete;
             this.scoreboard = scoreboard;
             this.numberOfRolls = numberOfRolls;
         }
 
-        public int getTurnId() {
-            return turnId;
+        public int getGameId() {
+            return gameId;
         }
 
-        public void setTurnId(int turnId) {
-            this.turnId = turnId;
+        public void setGameId(int gameId) {
+            this.gameId = gameId;
         }
 
         public String getResult() {

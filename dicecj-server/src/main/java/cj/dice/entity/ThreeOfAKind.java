@@ -8,6 +8,10 @@ import java.util.List;
 @Entity
 public class ThreeOfAKind extends OfAKindScore {
 
+    public ThreeOfAKind() {
+        setName("Three of a Kind");
+    }
+
     @Override
     public int calculateValue(List<Die> dice) {
         return DiceUtil.sum(dice);
@@ -18,8 +22,4 @@ public class ThreeOfAKind extends OfAKindScore {
         return 3;
     }
 
-    @Override
-    public String getName() {
-        return "Three of a kind";
-    }
 }

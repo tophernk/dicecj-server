@@ -1,9 +1,6 @@
 package cj.dice.entity;
 
-import cj.dice.DiceUtil;
-
 import javax.persistence.Entity;
-import javax.persistence.Transient;
 import java.util.List;
 
 @Entity

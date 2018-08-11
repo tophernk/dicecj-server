@@ -8,9 +8,8 @@ import java.util.Map;
 @Entity
 public class FullHouse extends Score {
 
-    @Override
-    public String getName() {
-        return "Full House";
+    public FullHouse() {
+        setName("Full House");
     }
 
     @Override

@@ -9,9 +9,8 @@ import java.util.List;
 @Entity
 public class Straight extends Score {
 
-    @Override
-    public String getName() {
-        return "Straight";
+    public Straight() {
+        setName("Straight");
     }
 
     protected int getRequiredLength() {

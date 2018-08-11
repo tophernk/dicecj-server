@@ -88,9 +88,9 @@ public class ScoreboardSerivce {
         return scoreboard;
     }
 
-    public void printOneLine(Scoreboard scoreboard) {
-        System.out.println("Date: " + DateFormat.getDateInstance(DateFormat.SHORT).format(scoreboard.getDate())
-                + " Player: " + scoreboard.getPlayer().getName() + " Total: " + getTotal(scoreboard));
+    public String printOneLine(Scoreboard scoreboard) {
+        return "Date: " + DateFormat.getDateInstance(DateFormat.SHORT).format(scoreboard.getDate())
+                + " Player: " + scoreboard.getPlayer().getName() + " Total: " + getTotal(scoreboard) + "\n";
     }
 
     public int calculateBonus(Scoreboard scoreboard) {
@@ -132,15 +132,17 @@ public class ScoreboardSerivce {
         return scoreboardsByPlayer;
     }
 
-    public void printAndHighlightScoreboardByPlayer(Scoreboard scoreboard, Player player) {
-        List<Scoreboard> topScoreboardsByPlayer = findScoreboardsByPlayer(player);
+    public String printAndHighlightScoreboardsOfPlayer(Scoreboard scoreboard) {
+        List<Scoreboard> topScoreboardsByPlayer = findScoreboardsByPlayer(scoreboard.getPlayer());
+        StringBuilder result = new StringBuilder();
         for (Scoreboard sb : topScoreboardsByPlayer) {
             if (sb.getId() == scoreboard.getId()) {
-                System.out.print("--> ");
+                result.append("--> ");
             }
-            System.out.print(topScoreboardsByPlayer.indexOf(sb) + " ");
-            printOneLine(sb);
+            result.append(topScoreboardsByPlayer.indexOf(sb) + " ");
+            result.append(printOneLine(sb));
         }
+        return result.toString();
     }
 
     public void save(Scoreboard scoreboard) {

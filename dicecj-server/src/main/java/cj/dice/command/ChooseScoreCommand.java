@@ -3,15 +3,12 @@ package cj.dice.command;
 import cj.dice.entity.Die;
 import cj.dice.InputException;
 import cj.dice.entity.Score;
-import cj.dice.entity.Scoreboard;
 import cj.dice.service.ScoreboardSerivce;
-import cj.dice.entity.Turn;
+import cj.dice.entity.Game;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
 
 @Stateless
 public class ChooseScoreCommand implements InputCommand {
@@ -20,15 +17,15 @@ public class ChooseScoreCommand implements InputCommand {
     private ScoreboardSerivce scoreboardSerivce;
 
     @Override
-    public String execute(String userInput, Turn turn) throws InputException {
-        if (turn.getDice().stream().anyMatch(d -> !d.isValid())) {
+    public String execute(String userInput, Game game) throws InputException {
+        if (game.getDice().stream().anyMatch(d -> !d.isValid())) {
             throw new InputException("please (re)roll dice");
         }
         try {
-            List<Score> scoringOptions = turn.getScoreboard().getOpenScores();
+            List<Score> scoringOptions = game.getScoreboard().getOpenScores();
             Score score = scoringOptions.stream().filter(s -> s.getIndex() == Integer.valueOf(userInput.substring(1))).findAny().orElseThrow(IllegalArgumentException::new);
-            scoreboardSerivce.addScore(turn.getScoreboard(), score, turn.getDice());
-            turn.getDice().forEach(Die::reset);
+            scoreboardSerivce.addScore(game.getScoreboard(), score, game.getDice());
+            game.getDice().forEach(Die::reset);
             return score.getValue() + " added to " + score.getName();
         } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
             throw new InputException("invalid input");

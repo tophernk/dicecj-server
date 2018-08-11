@@ -3,11 +3,9 @@ package cj.dice.service;
 import cj.dice.entity.Die;
 import cj.dice.InputException;
 import cj.dice.command.*;
+import cj.dice.entity.Game;
 import cj.dice.entity.Player;
-import cj.dice.entity.Scoreboard;
-import cj.dice.entity.Turn;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
@@ -15,7 +13,6 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 @Stateless
 public class CoreService {
@@ -23,14 +20,24 @@ public class CoreService {
     @Inject
     private ScoreboardSerivce scoreboardSerivce;
 
+    @Inject
+    private GameDao gameDao;
+
     public static final int NUMBER_OF_DICE = 5;
 
     @Inject
     @Any
     private Instance<InputCommand> inputCommands;
 
-    public Turn initTurn(Player player) {
-        return new Turn(scoreboardSerivce.buildScoreboard(player), initDice(), 0);
+    public Game initNewGame(Player player) {
+        Game game = gameDao.findGameByPlayer(player);
+        if (game == null) {
+            gameDao.createGame(new Game(scoreboardSerivce.buildScoreboard(player), initDice(), 0));
+        }
+        if (game.getScoreboard().isComplete()) {
+            game.setScoreboard(scoreboardSerivce.buildScoreboard(player));
+        }
+        return game;
     }
 
     private List<Die> initDice() {
@@ -49,15 +56,15 @@ public class CoreService {
         return stringBuilder.append("********\n").toString();
     }
 
-    public String executeCommand(Optional<InputCommand> inputCommand, String userInput, Turn turn) {
+    public String executeCommand(Optional<InputCommand> inputCommand, String userInput, Game game) {
         try {
-            String result = inputCommand.get().execute(userInput, turn);
+            String result = inputCommand.get().execute(userInput, game);
             if (inputCommand.get().isRoll()) {
-                turn.setNumberOfRolls(turn.getNumberOfRolls() + 1);
+                game.setCurrentNumberOfRolls(game.getCurrentNumberOfRolls() + 1);
             }
             if (inputCommand.get().isTurnEndCommand()) {
-                turn.getDice().forEach(Die::unlock);
-                turn.setNumberOfRolls(0);
+                game.getDice().forEach(Die::unlock);
+                game.setCurrentNumberOfRolls(0);
             }
             return  result;
         } catch (InputException e) {

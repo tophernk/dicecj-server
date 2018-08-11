@@ -5,9 +5,8 @@ import javax.persistence.Entity;
 @Entity
 public class SmallStraight extends Straight {
 
-    @Override
-    public String getName() {
-        return "Small Straight";
+    public SmallStraight() {
+        setName("Small Straight");
     }
 
     @Override

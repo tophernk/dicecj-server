@@ -1,24 +1,24 @@
 package cj.dice.command;
 
 import cj.dice.entity.Die;
+import cj.dice.entity.Game;
 import cj.dice.service.CoreService;
-import cj.dice.entity.Turn;
 
 import javax.ejb.Stateless;
 
 @Stateless
 public class SelectDiceCommand implements InputCommand {
     @Override
-    public String execute(String userInput, Turn turn) {
+    public String execute(String userInput, Game game) {
         char[] chars = userInput.toCharArray();
         for (int x = 0; x < chars.length; x++) {
             int numericValue = Character.getNumericValue(chars[x]);
             if (numericValue > 0 && numericValue <= CoreService.NUMBER_OF_DICE) {
-                turn.getDice().get(numericValue - 1).toggleLock();
+                game.getDice().get(numericValue - 1).toggleLock();
             }
         }
         String result = "";
-        for (Die d : turn.getDice()) {
+        for (Die d : game.getDice()) {
             result += d.toString();
         }
         return  result;

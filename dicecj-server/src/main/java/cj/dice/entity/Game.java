@@ -1,37 +1,34 @@
 package cj.dice.entity;
 
-import cj.dice.entity.Die;
-import cj.dice.entity.Scoreboard;
-
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Turn {
+public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SCOREBOARD_ID")
     private Scoreboard scoreboard;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "TURN_DIE", joinColumns = @JoinColumn(name = "TURN_ID"),
+    @JoinTable(name = "GAME_DIE", joinColumns = @JoinColumn(name = "GAME_ID"),
             inverseJoinColumns = @JoinColumn(name = "DIE_ID"))
     private List<Die> dice;
 
-    @Column(name = "NUMBER_OF_ROLLS")
-    private int numberOfRolls;
+    @Column(name = "CURRENT_NUMBER_OF_ROLLS")
+    private int currentNumberOfRolls;
 
-    public Turn() {
+    public Game() {
     }
 
-    public Turn(Scoreboard scoreboard, List<Die> dice, int numberOfRolls) {
+    public Game(Scoreboard scoreboard, List<Die> dice, int currentNumberOfRolls) {
         this.scoreboard = scoreboard;
         this.dice = dice;
-        this.numberOfRolls = numberOfRolls;
+        this.currentNumberOfRolls = currentNumberOfRolls;
     }
 
 
@@ -59,11 +56,11 @@ public class Turn {
         this.dice = dice;
     }
 
-    public int getNumberOfRolls() {
-        return numberOfRolls;
+    public int getCurrentNumberOfRolls() {
+        return currentNumberOfRolls;
     }
 
-    public void setNumberOfRolls(int numberOfRolls) {
-        this.numberOfRolls = numberOfRolls;
+    public void setCurrentNumberOfRolls(int currentNumberOfRolls) {
+        this.currentNumberOfRolls = currentNumberOfRolls;
     }
 }
