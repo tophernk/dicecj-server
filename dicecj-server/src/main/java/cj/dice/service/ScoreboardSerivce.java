@@ -35,7 +35,7 @@ public class ScoreboardSerivce {
         return total + calculateBonus(scoreboard);
     }
 
-    public String printScores(Scoreboard scoreboard) {
+    public String printScores(Scoreboard scoreboard, List<Die> dice) {
         SortedSet<Score> scores = new TreeSet<>(Comparator.comparingInt(Score::getIndex));
         scores.addAll(scoreboard.getOpenScores());
         if (scoreboard.getClosedScores() != null) {
@@ -49,7 +49,9 @@ public class ScoreboardSerivce {
                 .append(" ")
                 .append(s.getName())
                 .append(": ")
-                .append(s.getValue())
+                .append(scoreboard.getOpenScores().contains(s) ?
+                        dice.stream().anyMatch(Die::isValid) ? "(" + s.evaluate(dice) + ")" : "-"
+                        : s.getValue())
                 .append("\n"));
         result.append("---------\nBonus: ")
                 .append(calculateBonus(scoreboard) + " (" + calculateCurrentDiffToRegularBonus(scoreboard) + ")")
@@ -89,8 +91,9 @@ public class ScoreboardSerivce {
     }
 
     public String printOneLine(Scoreboard scoreboard) {
-        return "Date: " + DateFormat.getDateInstance(DateFormat.SHORT).format(scoreboard.getDate())
-                + " Player: " + scoreboard.getPlayer().getName() + " Total: " + getTotal(scoreboard) + "\n";
+        return scoreboard.getPlayer().getName() +
+                " (" + DateFormat.getDateInstance(DateFormat.SHORT).format(scoreboard.getDate()) + "): " +
+                getTotal(scoreboard) + "\n";
     }
 
     public int calculateBonus(Scoreboard scoreboard) {

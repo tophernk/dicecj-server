@@ -59,7 +59,8 @@ public class GameDao extends AbstractDao {
         }
     }
 
-    public void createGame(Game game) {
+    public Game createGame(Game game) {
         super.create(game);
+        return game;
     }
 }

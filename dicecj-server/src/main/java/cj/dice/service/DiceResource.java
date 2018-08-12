@@ -22,7 +22,7 @@ public class DiceResource {
     private CoreService coreService;
 
     @Inject
-    ScoreboardSerivce scoreboardSerivce;
+    private ScoreboardSerivce scoreboardSerivce;
 
     @Inject
     private GameDao gameDao;
@@ -33,11 +33,10 @@ public class DiceResource {
         Player player = playerService.findOrCreatePlayer(playerName);
 
         Game game = coreService.initNewGame(player);
-        scoreboardSerivce.printAndHighlightScoreboardsOfPlayer(game.getScoreboard());
 
         String result = coreService.retrieveInstructions();
         return JsonbBuilder.create().toJson(new CommandResponse(game.getId(), result,
-                game.getScoreboard().isComplete(), scoreboardSerivce.printScores(game.getScoreboard()),
+                game.getScoreboard().isComplete(), scoreboardSerivce.printScores(game.getScoreboard(), game.getDice()),
                 game.getCurrentNumberOfRolls()));
     }
 
@@ -54,7 +53,7 @@ public class DiceResource {
             result = "invalid input";
         }
         return JsonbBuilder.create().toJson(new CommandResponse(game.getId(), result,
-                game.getScoreboard().isComplete(), scoreboardSerivce.printScores(game.getScoreboard()),
+                game.getScoreboard().isComplete(), scoreboardSerivce.printScores(game.getScoreboard(), game.getDice()),
                 game.getCurrentNumberOfRolls()));
     }
 

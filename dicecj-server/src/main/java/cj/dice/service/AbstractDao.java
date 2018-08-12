@@ -12,5 +12,6 @@ public abstract class AbstractDao {
 
     public void create(Object o) {
         entityManager.persist(o);
+        entityManager.flush();
     }
 }

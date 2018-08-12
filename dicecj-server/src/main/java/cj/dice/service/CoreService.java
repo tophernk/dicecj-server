@@ -32,7 +32,7 @@ public class CoreService {
     public Game initNewGame(Player player) {
         Game game = gameDao.findGameByPlayer(player);
         if (game == null) {
-            gameDao.createGame(new Game(scoreboardSerivce.buildScoreboard(player), initDice(), 0));
+            game = gameDao.createGame(new Game(scoreboardSerivce.buildScoreboard(player), initDice(), 0));
         }
         if (game.getScoreboard().isComplete()) {
             game.setScoreboard(scoreboardSerivce.buildScoreboard(player));
