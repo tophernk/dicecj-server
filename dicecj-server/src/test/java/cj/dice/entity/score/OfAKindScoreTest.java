@@ -14,7 +14,6 @@ public class OfAKindScoreTest {
 
         // all different
         Assert.assertEquals(0, threeOfAKind.evaluate(TestDiceUtil.createDice(2, 3, 4, 5, 6)));
-        Assert.assertEquals(0, threeOfAKind.evaluate(TestDiceUtil.createDice(2, 2, 4, 5, 6)));
 
         // two matching
         Assert.assertEquals(0, threeOfAKind.evaluate(TestDiceUtil.createDice(2, 2, 1, 5, 6)));
@@ -40,7 +39,6 @@ public class OfAKindScoreTest {
 
         // all different
         Assert.assertEquals(0, fourOfAKind.evaluate(TestDiceUtil.createDice(2, 3, 4, 5, 6)));
-        Assert.assertEquals(0, fourOfAKind.evaluate(TestDiceUtil.createDice(2, 2, 4, 5, 6)));
 
         // two matching
         Assert.assertEquals(0, fourOfAKind.evaluate(TestDiceUtil.createDice(2, 2, 1, 5, 6)));
@@ -66,7 +64,6 @@ public class OfAKindScoreTest {
 
         // all different
         Assert.assertEquals(0, yahtzee.evaluate(TestDiceUtil.createDice(2, 3, 4, 5, 6)));
-        Assert.assertEquals(0, yahtzee.evaluate(TestDiceUtil.createDice(2, 2, 4, 5, 6)));
 
         // two matching
         Assert.assertEquals(0, yahtzee.evaluate(TestDiceUtil.createDice(2, 2, 1, 5, 6)));
