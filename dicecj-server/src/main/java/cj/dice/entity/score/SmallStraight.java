@@ -1,4 +1,4 @@
-package cj.dice.entity;
+package cj.dice.entity.score;
 
 import javax.persistence.Entity;
 

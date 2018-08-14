@@ -2,6 +2,7 @@ package cj.dice.service;
 
 import cj.dice.entity.Die;
 import cj.dice.entity.*;
+import cj.dice.entity.score.*;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

@@ -1,4 +1,6 @@
-package cj.dice.entity;
+package cj.dice.entity.score;
+
+import cj.dice.entity.Die;
 
 import javax.persistence.*;
 import java.util.List;

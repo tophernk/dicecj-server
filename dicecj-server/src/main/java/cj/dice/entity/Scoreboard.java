@@ -1,5 +1,7 @@
 package cj.dice.entity;
 
+import cj.dice.entity.score.Score;
+
 import javax.persistence.*;
 import java.util.*;
 

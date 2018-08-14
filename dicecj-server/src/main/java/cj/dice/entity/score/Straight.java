@@ -1,7 +1,8 @@
-package cj.dice.entity;
+package cj.dice.entity.score;
+
+import cj.dice.entity.Die;
 
 import javax.persistence.Entity;
-import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

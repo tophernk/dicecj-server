@@ -5,7 +5,7 @@ import cj.dice.entity.Die;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestUtil {
+public class TestDiceUtil {
     public static List<Die> createDice(int v1, int v2, int v3, int v4, int v5) {
         Die d1 = new Die();
         d1.setValue(v1);

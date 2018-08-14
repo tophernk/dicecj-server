@@ -2,7 +2,7 @@ package cj.dice.command;
 
 import cj.dice.entity.Die;
 import cj.dice.InputException;
-import cj.dice.entity.Score;
+import cj.dice.entity.score.Score;
 import cj.dice.service.ScoreboardSerivce;
 import cj.dice.entity.Game;
 
