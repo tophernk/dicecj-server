@@ -11,10 +11,14 @@ import javax.inject.Inject;
 import java.util.List;
 
 @Stateless
-public class ChooseScoreCommand implements InputCommand {
+public class ChooseScoreCommand extends InputCommand {
 
     @Inject
     private ScoreboardSerivce scoreboardSerivce;
+
+    public ChooseScoreCommand() {
+        setTrigger("scr:");
+    }
 
     @Override
     public String execute(String userInput, Game game) throws InputException {
@@ -22,12 +26,22 @@ public class ChooseScoreCommand implements InputCommand {
             throw new InputException("please (re)roll dice");
         }
         try {
+            String scoreIndex = extractScoreIndex(userInput);
             List<Score> scoringOptions = game.getScoreboard().getOpenScores();
-            Score score = scoringOptions.stream().filter(s -> s.getIndex() == Integer.valueOf(userInput.substring(1))).findAny().orElseThrow(IllegalArgumentException::new);
+            Score score = scoringOptions.stream().filter(s -> s.getIndex() == Integer.valueOf(scoreIndex)).findAny().orElseThrow(IllegalArgumentException::new);
             scoreboardSerivce.addScore(game.getScoreboard(), score, game.getDice());
             game.getDice().forEach(Die::reset);
             return score.getValue() + " added to " + score.getName();
         } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
+            throw new InputException("invalid input");
+        }
+    }
+
+    private String extractScoreIndex(String userInput) throws InputException {
+        String[] split = splitInputByWhiteSpaces(userInput);
+        if (split.length > 1) {
+            return split[1];
+        } else {
             throw new InputException("invalid input");
         }
     }
@@ -38,17 +52,8 @@ public class ChooseScoreCommand implements InputCommand {
     }
 
     @Override
-    public boolean isTrigger(String userInput) {
-        return userInput.startsWith("s");
-    }
-
-    @Override
     public String retrieveInstructions() {
-        return "[s] put entity on scoreboard";
+        return "[" + getTrigger() + "] lock value of score i on scoreboard";
     }
 
-    @Override
-    public boolean isRoll() {
-        return false;
-    }
 }

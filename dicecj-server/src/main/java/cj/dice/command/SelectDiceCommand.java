@@ -5,9 +5,18 @@ import cj.dice.entity.Game;
 import cj.dice.service.CoreService;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 @Stateless
-public class SelectDiceCommand implements InputCommand {
+public class SelectDiceCommand extends InputCommand {
+
+    @Inject
+    CoreService coreService;
+
+    public SelectDiceCommand() {
+        setTrigger("sel:");
+    }
+
     @Override
     public String execute(String userInput, Game game) {
         char[] chars = userInput.toCharArray();
@@ -17,31 +26,12 @@ public class SelectDiceCommand implements InputCommand {
                 game.getDice().get(numericValue - 1).toggleLock();
             }
         }
-        String result = "";
-        for (Die d : game.getDice()) {
-            result += d.toString();
-        }
-        return  result;
-    }
-
-    @Override
-    public boolean isTurnEndCommand() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrigger(String userInput) {
-        return userInput.matches("[0-9]+");
+        return  coreService.printDice(game);
     }
 
     @Override
     public String retrieveInstructions() {
-        return "[die number(s)] select di(c)e";
-    }
-
-    @Override
-    public boolean isRoll() {
-        return false;
+        return "[sel:dieNumber(s)] select di(c)e";
     }
 
 }
