@@ -17,7 +17,7 @@ public class RollDiceCommand extends InputCommand {
     private CoreService coreService;
 
     public RollDiceCommand() {
-        setTrigger("r");
+        super("r");
     }
 
     @Override

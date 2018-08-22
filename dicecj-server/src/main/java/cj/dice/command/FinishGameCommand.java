@@ -14,7 +14,7 @@ public class FinishGameCommand extends InputCommand {
     private ScoreboardSerivce scoreboardSerivce;
 
     public FinishGameCommand() {
-        setTrigger("f");
+        super("f");
     }
 
     @Override

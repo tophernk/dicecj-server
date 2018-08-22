@@ -17,7 +17,7 @@ public class ChooseScoreCommand extends InputCommand {
     private ScoreboardSerivce scoreboardSerivce;
 
     public ChooseScoreCommand() {
-        setTrigger("scr:");
+        super("scr:");
     }
 
     @Override

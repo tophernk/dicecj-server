@@ -14,7 +14,7 @@ public class SelectDiceCommand extends InputCommand {
     CoreService coreService;
 
     public SelectDiceCommand() {
-        setTrigger("sel:");
+        super("sel:");
     }
 
     @Override

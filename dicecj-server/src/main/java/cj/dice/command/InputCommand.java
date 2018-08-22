@@ -7,6 +7,10 @@ public abstract class InputCommand {
 
     private String trigger;
 
+    public InputCommand(String trigger) {
+        this.trigger = trigger;
+    }
+
     public abstract String execute(String userInput, Game game) throws InputException;
 
     public boolean isTurnEndCommand() {

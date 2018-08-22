@@ -23,7 +23,7 @@ public class NewGameCommand extends InputCommand {
     private ScoreboardSerivce scoreboardSerivce;
 
     public NewGameCommand() {
-        setTrigger("n:");
+        super("n:");
     }
 
     @Override
