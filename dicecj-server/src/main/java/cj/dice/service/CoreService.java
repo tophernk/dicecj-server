@@ -76,9 +76,9 @@ public class CoreService {
                 game.getDice().forEach(Die::unlock);
                 game.setCurrentNumberOfRolls(0);
             }
-            return result;
+            return game != null ? buildResult(game, result) : result;
         } catch (InputException e) {
-            return e.getMessage();
+            return buildResult(game, e.getMessage());
         }
     }
 
@@ -87,6 +87,9 @@ public class CoreService {
     }
 
     public String buildResult(Game game, String result) {
+        if (game == null) {
+            return JsonbBuilder.create().toJson(new CommandResponse(-1, result + ": create a new game", false, "-", -1, "xxxxx", collectAvailableCommands()));
+        }
         return JsonbBuilder.create().toJson(new CommandResponse(game.getId(), result,
                 game.getScoreboard().isComplete(), scoreboardSerivce.printScores(game.getScoreboard(), game.getDice()),
                 game.getCurrentNumberOfRolls(), printDice(game), collectAvailableCommands()));
@@ -94,11 +97,11 @@ public class CoreService {
 
     private HashMap<String, String> collectAvailableCommands() {
         return inputCommands.stream().collect(Collector.of(HashMap::new, (tmpResult, command) -> {
-                tmpResult.put(command.retrieveInstructions(), command.getTrigger());
-            }, (finalResult, subResult) -> {
-                finalResult.putAll(subResult);
-                return finalResult;
-            }));
+            tmpResult.put(command.retrieveInstructions(), command.getTrigger());
+        }, (finalResult, subResult) -> {
+            finalResult.putAll(subResult);
+            return finalResult;
+        }));
     }
 
     public String printDice(Game game) {

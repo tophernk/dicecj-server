@@ -14,7 +14,7 @@ public class SelectDiceCommand extends InputCommand {
     CoreService coreService;
 
     public SelectDiceCommand() {
-        super("sel:");
+        super("sel");
     }
 
     @Override
@@ -26,12 +26,12 @@ public class SelectDiceCommand extends InputCommand {
                 game.getDice().get(numericValue - 1).toggleLock();
             }
         }
-        return  coreService.printDice(game);
+        return coreService.printDice(game);
     }
 
     @Override
     public String retrieveInstructions() {
-        return "[sel:dieNumber(s)] select di(c)e";
+        return "[" + getTrigger() + ":dieNumber(s)] select di(c)e";
     }
 
 }

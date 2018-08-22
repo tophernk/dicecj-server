@@ -3,6 +3,7 @@ package cj.dice.command;
 import cj.dice.entity.Die;
 import cj.dice.InputException;
 import cj.dice.entity.score.Score;
+import cj.dice.service.CoreService;
 import cj.dice.service.ScoreboardSerivce;
 import cj.dice.entity.Game;
 
@@ -17,7 +18,7 @@ public class ChooseScoreCommand extends InputCommand {
     private ScoreboardSerivce scoreboardSerivce;
 
     public ChooseScoreCommand() {
-        super("scr:");
+        super("scr");
     }
 
     @Override
@@ -31,14 +32,18 @@ public class ChooseScoreCommand extends InputCommand {
             Score score = scoringOptions.stream().filter(s -> s.getIndex() == Integer.valueOf(scoreIndex)).findAny().orElseThrow(IllegalArgumentException::new);
             scoreboardSerivce.addScore(game.getScoreboard(), score, game.getDice());
             game.getDice().forEach(Die::reset);
-            return score.getValue() + " added to " + score.getName();
+            return printResult(score);
         } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
             throw new InputException("invalid input");
         }
     }
 
+    private String printResult(Score score) {
+        return score.getValue() + " added to " + score.getName();
+    }
+
     private String extractScoreIndex(String userInput) throws InputException {
-        String[] split = splitInputByWhiteSpaces(userInput);
+        String[] split = splitInputByColon(userInput);
         if (split.length > 1) {
             return split[1];
         } else {
@@ -53,7 +58,7 @@ public class ChooseScoreCommand extends InputCommand {
 
     @Override
     public String retrieveInstructions() {
-        return "[" + getTrigger() + "] lock value of score i on scoreboard";
+        return "[" + getTrigger() + ":i] lock value of score i on scoreboard";
     }
 
 }

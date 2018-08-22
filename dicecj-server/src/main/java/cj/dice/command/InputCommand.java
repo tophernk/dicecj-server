@@ -18,12 +18,12 @@ public abstract class InputCommand {
     }
 
     public final boolean isTrigger(String userInput) {
-        String[] split = splitInputByWhiteSpaces(userInput);
+        String[] split = splitInputByColon(userInput);
         return split.length > 0 ? split[0].equals(trigger) : false;
     }
 
-    protected String[] splitInputByWhiteSpaces(String userInput) {
-        return userInput.split("\\s");
+    public String[] splitInputByColon(String userInput) {
+        return userInput.split(":");
     }
 
     public abstract String retrieveInstructions();

@@ -23,7 +23,7 @@ public class NewGameCommand extends InputCommand {
     private ScoreboardSerivce scoreboardSerivce;
 
     public NewGameCommand() {
-        super("n:");
+        super("n");
     }
 
     @Override
@@ -35,7 +35,7 @@ public class NewGameCommand extends InputCommand {
     }
 
     private String extractPlayerName(String userInput) throws InputException {
-        String[] split = splitInputByWhiteSpaces(userInput);
+        String[] split = splitInputByColon(userInput);
         if (split.length > 1) {
             return split[1];
         } else {
@@ -45,7 +45,7 @@ public class NewGameCommand extends InputCommand {
 
     @Override
     public String retrieveInstructions() {
-        return "[" + getTrigger() + "playerName] new game";
+        return "[" + getTrigger() + ":playerName] new game";
     }
 
 }
