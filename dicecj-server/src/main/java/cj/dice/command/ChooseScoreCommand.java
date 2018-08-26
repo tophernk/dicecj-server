@@ -26,9 +26,8 @@ public class ChooseScoreCommand extends InputCommand {
             throw new InputException("please (re)roll dice");
         }
         try {
-            String scoreIndex = extractScoreIndex(userInput);
             List<Score> scoringOptions = game.getScoreboard().getOpenScores();
-            Score score = scoringOptions.stream().filter(s -> s.getIndex() == Integer.valueOf(scoreIndex)).findAny().orElseThrow(IllegalArgumentException::new);
+            Score score = scoringOptions.stream().filter(s -> s.getIndex() == Integer.valueOf(userInput)).findAny().orElseThrow(IllegalArgumentException::new);
             scoreboardSerivce.addScore(game.getScoreboard(), score, game.getDice());
             game.getDice().forEach(Die::reset);
             return printResult(score);
@@ -39,15 +38,6 @@ public class ChooseScoreCommand extends InputCommand {
 
     private String printResult(Score score) {
         return score.getValue() + " added to " + score.getName();
-    }
-
-    private String extractScoreIndex(String userInput) throws InputException {
-        String[] split = splitInputByColon(userInput);
-        if (split.length > 1) {
-            return split[1];
-        } else {
-            throw new InputException("invalid input");
-        }
     }
 
     @Override

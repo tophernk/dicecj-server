@@ -30,15 +30,20 @@ public class DiceResource {
                 return NO_RESPONSE;
             }
             Game game = gameDao.findGameById(request.getGameId());
-            Optional<InputCommand> inputCommand = coreService.getFirstExecutableCommand(request.getUserInput());
+            Optional<InputCommand> inputCommand = coreService.getFirstExecutableCommand(extractArguments(request));
             if (inputCommand.isPresent()) {
-                return coreService.executeCommand(inputCommand.get(), request.getUserInput(), game);
+                return coreService.executeCommand(inputCommand.get(), extractArguments(request), game);
             } else {
                 return coreService.buildResult(game, "invalid input");
             }
         } catch (Exception e) {
             return NO_RESPONSE;
         }
+    }
+
+    private String extractArguments(CoreService.CommandRequest request) {
+        String userInput = request.getUserInput();
+        return userInput.contains(":") ? userInput.substring(userInput.indexOf(':')) : request.getUserInput();
     }
 
     @GET

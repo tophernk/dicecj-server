@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectDiceCommandTest {
+public class SelectDiceCommandTest extends CommandTest {
 
     @InjectMocks
     private SelectDiceCommand command;
@@ -26,11 +26,6 @@ public class SelectDiceCommandTest {
     @Mock
     private Game game;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-    }
-
     private Die initExecute() {
         Die d1 = new Die();
         List<Die> dice = new ArrayList<>();
@@ -39,6 +34,7 @@ public class SelectDiceCommandTest {
         return d1;
     }
 
+    @Override
     @Test
     public void isTrigger() {
         Assert.assertTrue(command.isTrigger("sel"));
@@ -58,6 +54,7 @@ public class SelectDiceCommandTest {
         command.execute("invalidInput", game);
     }
 
+    @Override
     @Test
     public void retrieveInstructions() {
         Assert.assertNotNull(command.retrieveInstructions());
