@@ -23,9 +23,20 @@ public class SelectDiceCommandTest {
     @Mock
     private CoreService coreServiceMock;
 
+    @Mock
+    private Game game;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    private Die initExecute() {
+        Die d1 = new Die();
+        List<Die> dice = new ArrayList<>();
+        dice.add(d1);
+        Mockito.when(game.getDice()).thenReturn(dice);
+        return d1;
     }
 
     @Test
@@ -35,12 +46,7 @@ public class SelectDiceCommandTest {
 
     @Test
     public void execute() throws InputException {
-        Game game = new Game();
-        Die d1 = new Die();
-        List<Die> dice = new ArrayList<>();
-        dice.add(d1);
-        game.setDice(dice);
-
+        Die d1 = initExecute();
         command.execute("0", game);
         Assert.assertFalse(d1.isLocked());
         command.execute("1", game);
@@ -49,7 +55,7 @@ public class SelectDiceCommandTest {
 
     @Test(expected = InputException.class)
     public void executeWithInputException() throws InputException {
-        command.execute("invalidInput", new Game());
+        command.execute("invalidInput", game);
     }
 
     @Test
