@@ -4,6 +4,7 @@ import cj.dice.entity.Die;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public abstract class Score implements Comparable<Score> {
@@ -61,6 +62,21 @@ public abstract class Score implements Comparable<Score> {
 
     @Override
     public int compareTo(Score score) {
-        return Integer.compare(getIndex(), score.getIndex());
+        return this.equals(score) ? 0 : Integer.compare(getIndex(), score.getIndex());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Score score = (Score) o;
+        return value == score.value &&
+                index == score.index &&
+                Objects.equals(name, score.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, value, index);
     }
 }

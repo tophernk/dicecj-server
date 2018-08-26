@@ -1,8 +1,8 @@
 package cj.dice.service;
 
-import cj.dice.entity.Die;
 import cj.dice.InputException;
-import cj.dice.command.*;
+import cj.dice.command.InputCommand;
+import cj.dice.entity.Die;
 import cj.dice.entity.Game;
 import cj.dice.entity.Player;
 
@@ -10,19 +10,15 @@ import javax.ejb.Stateless;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.json.Json;
+import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Stateless
 public class CoreService {
 
+    public static final String JSONB_ERROR = "Jsonb error";
     @Inject
     private ScoreboardSerivce scoreboardSerivce;
 
@@ -55,7 +51,8 @@ public class CoreService {
     }
 
     public String retrieveCommandOverview() {
-        return JsonbBuilder.create().toJson(new StartResponse("These commands are available", collectAvailableCommands()));
+        Jsonb json = createJson();
+        return json != null ? json.toJson(new StartResponse("These commands are available", collectAvailableCommands())) : JSONB_ERROR;
     }
 
     public String retrieveInstructions() {
@@ -66,13 +63,13 @@ public class CoreService {
         return stringBuilder.append("********\n").toString();
     }
 
-    public String executeCommand(Optional<InputCommand> inputCommand, String userInput, Game game) {
+    public String executeCommand(InputCommand inputCommand, String userInput, Game game) {
         try {
-            String result = inputCommand.get().execute(userInput, game);
-            if (inputCommand.get().isRoll()) {
+            String result = inputCommand.execute(userInput, game);
+            if (inputCommand.isRoll()) {
                 game.setCurrentNumberOfRolls(game.getCurrentNumberOfRolls() + 1);
             }
-            if (inputCommand.get().isTurnEndCommand()) {
+            if (inputCommand.isTurnEndCommand()) {
                 game.getDice().forEach(Die::unlock);
                 game.setCurrentNumberOfRolls(0);
             }
@@ -87,29 +84,41 @@ public class CoreService {
     }
 
     public String buildResult(Game game, String result) {
-        if (game == null) {
-            return JsonbBuilder.create().toJson(new CommandResponse(-1, result + ": create a new game", false, "-", -1, "xxxxx", collectAvailableCommands()));
+        Jsonb json = createJson();
+        if (json == null) {
+            return JSONB_ERROR;
         }
-        return JsonbBuilder.create().toJson(new CommandResponse(game.getId(), result,
+        if (game == null) {
+            return json.toJson(new CommandResponse(-1, result + ": create a new game", false, "-", -1, "xxxxx", collectAvailableCommands()));
+        }
+        return json.toJson(new CommandResponse(game.getId(), result,
                 game.getScoreboard().isComplete(), scoreboardSerivce.printScores(game.getScoreboard(), game.getDice()),
                 game.getCurrentNumberOfRolls(), printDice(game), collectAvailableCommands()));
     }
 
+    public Jsonb createJson() {
+        try (Jsonb jsonb = JsonbBuilder.create()) {
+            return jsonb;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private HashMap<String, String> collectAvailableCommands() {
-        return inputCommands.stream().collect(Collector.of(HashMap::new, (tmpResult, command) -> {
-            tmpResult.put(command.retrieveInstructions(), command.getTrigger());
-        }, (finalResult, subResult) -> {
-            finalResult.putAll(subResult);
-            return finalResult;
-        }));
+        return inputCommands.stream().collect(Collector.of(HashMap::new,
+                (tmpResult, command) -> tmpResult.put(command.retrieveInstructions(), command.getTrigger()),
+                (finalResult, subResult) -> {
+                    finalResult.putAll(subResult);
+                    return finalResult;
+                }));
     }
 
     public String printDice(Game game) {
-        String dice = "";
+        StringBuilder dice = new StringBuilder("");
         for (Die d : game.getDice()) {
-            dice += d.toString();
+            dice.append(d);
         }
-        return dice;
+        return dice.toString();
     }
 
     public static class StartResponse {

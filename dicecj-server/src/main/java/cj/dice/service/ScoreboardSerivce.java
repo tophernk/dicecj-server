@@ -45,14 +45,12 @@ public class ScoreboardSerivce {
 
         StringBuilder result = new StringBuilder();
 
-        scores.forEach((s) -> result
+        scores.forEach(s -> result
                 .append(s.getIndex())
                 .append(" ")
                 .append(s.getName())
                 .append(": ")
-                .append(scoreboard.getOpenScores().contains(s) ?
-                        dice.stream().anyMatch(Die::isValid) ? "(" + s.evaluate(dice) + ")" : "-"
-                        : s.getValue())
+                .append(printSingleScore(scoreboard, dice, s))
                 .append("\n"));
         result.append("---------\nBonus: ")
                 .append(calculateBonus(scoreboard) + " (" + calculateCurrentDiffToRegularBonus(scoreboard) + ")")
@@ -61,6 +59,16 @@ public class ScoreboardSerivce {
                 .append(getTotal(scoreboard));
 
         return result.toString();
+    }
+
+    private Object printSingleScore(Scoreboard scoreboard, List<Die> dice, Score s) {
+        return scoreboard.getOpenScores().contains(s) ?
+                printOpenScore(dice, s)
+                : s.getValue();
+    }
+
+    private String printOpenScore(List<Die> dice, Score s) {
+        return dice.stream().anyMatch(Die::isValid) ? "(" + s.evaluate(dice) + ")" : "-";
     }
 
     public Scoreboard buildScoreboard(Player player) {

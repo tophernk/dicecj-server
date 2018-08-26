@@ -5,7 +5,7 @@ import cj.dice.entity.Game;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.json.bind.JsonbBuilder;
+import javax.json.bind.Jsonb;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,6 +15,7 @@ import java.util.Optional;
 @Path("/command")
 public class DiceResource {
 
+    public static final String NO_RESPONSE = "no response";
     @Inject
     private CoreService coreService;
 
@@ -23,18 +24,25 @@ public class DiceResource {
 
     @POST
     public String command(String commandRequest) {
-        CoreService.CommandRequest request = JsonbBuilder.create().fromJson(commandRequest, CoreService.CommandRequest.class);
-        Game game = gameDao.findGameById(request.getGameId());
-        Optional<InputCommand> inputCommand = coreService.getFirstExecutableCommand(request.getUserInput());
-        if (inputCommand.isPresent()) {
-            return coreService.executeCommand(inputCommand, request.getUserInput(), game);
-        } else {
-            return coreService.buildResult(game, "invalid input");
+        try (Jsonb json = coreService.createJson()) {
+            CoreService.CommandRequest request = json != null ? json.fromJson(commandRequest, CoreService.CommandRequest.class) : null;
+            if (request == null) {
+                return NO_RESPONSE;
+            }
+            Game game = gameDao.findGameById(request.getGameId());
+            Optional<InputCommand> inputCommand = coreService.getFirstExecutableCommand(request.getUserInput());
+            if (inputCommand.isPresent()) {
+                return coreService.executeCommand(inputCommand.get(), request.getUserInput(), game);
+            } else {
+                return coreService.buildResult(game, "invalid input");
+            }
+        } catch (Exception e) {
+            return NO_RESPONSE;
         }
     }
 
-    @Path("/overview")
     @GET
+    @Path("/overview")
     public String commandOverView() {
         return coreService.retrieveCommandOverview();
     }

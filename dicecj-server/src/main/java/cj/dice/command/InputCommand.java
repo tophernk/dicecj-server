@@ -19,7 +19,7 @@ public abstract class InputCommand {
 
     public final boolean isTrigger(String userInput) {
         String[] split = splitInputByColon(userInput);
-        return split.length > 0 ? split[0].equals(trigger) : false;
+        return split.length > 0 && split[0].equals(trigger);
     }
 
     public String[] splitInputByColon(String userInput) {

@@ -1,6 +1,6 @@
 package cj.dice.command;
 
-import cj.dice.entity.Die;
+import cj.dice.InputException;
 import cj.dice.entity.Game;
 import cj.dice.service.CoreService;
 
@@ -18,11 +18,14 @@ public class SelectDiceCommand extends InputCommand {
     }
 
     @Override
-    public String execute(String userInput, Game game) {
+    public String execute(String userInput, Game game) throws InputException {
+        if (!userInput.matches("[0-9]")) {
+            throw new InputException("please provide numeric input");
+        }
         char[] chars = userInput.toCharArray();
         for (int x = 0; x < chars.length; x++) {
             int numericValue = Character.getNumericValue(chars[x]);
-            if (numericValue > 0 && numericValue <= CoreService.NUMBER_OF_DICE) {
+            if (numericValue > 0 && numericValue <= game.getDice().size()) {
                 game.getDice().get(numericValue - 1).toggleLock();
             }
         }

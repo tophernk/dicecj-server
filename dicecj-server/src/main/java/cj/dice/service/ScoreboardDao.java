@@ -14,10 +14,6 @@ import java.util.List;
 @Stateless
 public class ScoreboardDao extends AbstractDao {
 
-    public void create(Scoreboard scoreboard) {
-        super.create(scoreboard);
-    }
-
     public List<Scoreboard> findScoreboardsByPlayer(Player player) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Scoreboard> query = criteriaBuilder.createQuery(Scoreboard.class);

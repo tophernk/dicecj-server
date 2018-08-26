@@ -2,7 +2,6 @@ package cj.dice.command;
 
 import cj.dice.InputException;
 import cj.dice.entity.Game;
-import cj.dice.service.CoreService;
 import cj.dice.service.ScoreboardSerivce;
 
 import javax.ejb.Stateless;

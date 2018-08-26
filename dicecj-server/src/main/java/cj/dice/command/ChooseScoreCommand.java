@@ -1,11 +1,10 @@
 package cj.dice.command;
 
-import cj.dice.entity.Die;
 import cj.dice.InputException;
-import cj.dice.entity.score.Score;
-import cj.dice.service.CoreService;
-import cj.dice.service.ScoreboardSerivce;
+import cj.dice.entity.Die;
 import cj.dice.entity.Game;
+import cj.dice.entity.score.Score;
+import cj.dice.service.ScoreboardSerivce;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

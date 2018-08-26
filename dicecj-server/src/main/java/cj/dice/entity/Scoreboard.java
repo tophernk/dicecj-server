@@ -31,9 +31,6 @@ public class Scoreboard {
     @OrderBy(value = "index")
     private List<Score> openScores = new ArrayList<>();
 
-    public Scoreboard() {
-    }
-
     public boolean isComplete() {
         return openScores.isEmpty();
     }
