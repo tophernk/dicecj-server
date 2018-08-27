@@ -41,7 +41,7 @@ public class SelectDiceCommandTest extends CommandTest {
     @Test
     public void execute() throws InputException {
         Die d1 = initExecute();
-        command.execute("0", game);
+        command.execute("2", game);
         Assert.assertFalse(d1.isLocked());
         command.execute("1", game);
         Assert.assertTrue(d1.isLocked());

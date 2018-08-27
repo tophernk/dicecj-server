@@ -38,6 +38,7 @@ public class CoreService {
         }
         if (game.getScoreboard().isComplete()) {
             game.setScoreboard(scoreboardSerivce.buildScoreboard(player));
+            game.setCurrentNumberOfRolls(0);
         }
         return game;
     }

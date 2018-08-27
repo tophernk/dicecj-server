@@ -17,13 +17,8 @@ public abstract class InputCommand {
         return false;
     }
 
-    public final boolean isTrigger(String userInput) {
-        String[] split = splitInputByColon(userInput);
-        return split.length > 0 && split[0].equals(trigger);
-    }
-
-    public String[] splitInputByColon(String userInput) {
-        return userInput.split(":");
+    public final boolean isTrigger(String inputTrigger) {
+        return inputTrigger != null && inputTrigger.equals(this.trigger);
     }
 
     public abstract String retrieveInstructions();

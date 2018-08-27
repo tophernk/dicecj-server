@@ -19,8 +19,8 @@ public class SelectDiceCommand extends InputCommand {
 
     @Override
     public String execute(String userInput, Game game) throws InputException {
-        if (!userInput.matches("[0-9]")) {
-            throw new InputException("please provide numeric input");
+        if (!userInput.matches("[1-5]{1,5}")) {
+            throw new InputException("please select any of the five die by 1 to 5");
         }
         char[] chars = userInput.toCharArray();
         for (int x = 0; x < chars.length; x++) {
