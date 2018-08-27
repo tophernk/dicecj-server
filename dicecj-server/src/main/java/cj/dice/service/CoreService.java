@@ -35,8 +35,7 @@ public class CoreService {
         Game game = gameDao.findGameByPlayer(player);
         if (game == null) {
             game = gameDao.createGame(new Game(scoreboardSerivce.buildScoreboard(player), initDice(), 0));
-        }
-        if (game.getScoreboard().isComplete()) {
+        } else if (game.getScoreboard().isComplete()) {
             game.setScoreboard(scoreboardSerivce.buildScoreboard(player));
             game.setCurrentNumberOfRolls(0);
         }
