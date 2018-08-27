@@ -40,6 +40,7 @@ public class SelectDiceCommandTest extends CommandTest {
         Assert.assertTrue(command.isTrigger("sel"));
     }
 
+    @Override
     @Test
     public void execute() throws InputException {
         Die d1 = initExecute();

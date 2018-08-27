@@ -46,6 +46,7 @@ public class ChooseScoreCommandTest extends CommandTest {
         dice = new ArrayList<>();
     }
 
+    @Override
     @Test
     public void execute() throws InputException {
         initExecute();
@@ -60,11 +61,13 @@ public class ChooseScoreCommandTest extends CommandTest {
     }
 
     @Override
+    @Test
     public void isTrigger() {
         Assert.assertFalse(command.isTrigger("noTrigger"));
         Assert.assertTrue(command.isTrigger("scr"));
     }
 
+    @Override
     @Test
     public void retrieveInstructions() {
         Assert.assertNotNull(command.retrieveInstructions());
