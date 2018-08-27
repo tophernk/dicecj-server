@@ -22,9 +22,6 @@ public class ChooseScoreCommandTest extends CommandTest {
     private ChooseScoreCommand command;
 
     @Mock
-    private Game game;
-
-    @Mock
     private Scoreboard scoreboard;
 
     @Mock

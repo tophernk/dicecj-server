@@ -23,9 +23,6 @@ public class SelectDiceCommandTest extends CommandTest {
     @Mock
     private CoreService coreServiceMock;
 
-    @Mock
-    private Game game;
-
     private Die initExecute() {
         Die d1 = new Die();
         List<Die> dice = new ArrayList<>();

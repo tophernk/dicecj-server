@@ -28,19 +28,13 @@ public class NewGameCommand extends InputCommand {
 
     @Override
     public String execute(String userInput, Game game) throws InputException {
-        Player player = playerService.findOrCreatePlayer(extractPlayerName(userInput));
-        Game newGgame = coreService.initNewGame(player);
-        String result = coreService.retrieveInstructions();
-        return coreService.buildResult(newGgame, result);
-    }
-
-    private String extractPlayerName(String userInput) throws InputException {
-        String[] split = splitInputByColon(userInput);
-        if (split.length > 1) {
-            return split[1];
-        } else {
-            throw new InputException("invalid input");
+        if (userInput == null) {
+            throw new InputException("provide player name");
         }
+        Player player = playerService.findOrCreatePlayer(userInput);
+        Game newGame = coreService.initNewGame(player);
+        String result = coreService.retrieveInstructions();
+        return coreService.buildResult(newGame, result);
     }
 
     @Override

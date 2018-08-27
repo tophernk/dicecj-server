@@ -1,57 +1,53 @@
 package cj.dice.command;
 
 import cj.dice.InputException;
-import cj.dice.entity.Die;
-import cj.dice.entity.Game;
+import cj.dice.entity.Player;
 import cj.dice.service.CoreService;
+import cj.dice.service.PlayerService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class RollDiceCommandTest extends CommandTest {
+public class NewGameCommandTest extends CommandTest {
 
     @InjectMocks
-    private RollDiceCommand command;
-
-    @Mock
-    private Die die;
+    private NewGameCommand command;
 
     @Mock
     private CoreService coreService;
 
+    @Mock
+    private PlayerService playerService;
+
+    @Mock
+    private Player player;
+
     @Override
+    @Test
     public void execute() throws InputException {
-        List<Die> dice = new ArrayList<>();
-        dice.add(die);
-        Mockito.when(game.getDice()).thenReturn(dice);
-        command.execute(null, game);
-        Mockito.verify(die).roll();
+        String playerName = "playerName";
+        Mockito.when(playerService.findOrCreatePlayer(playerName)).thenReturn(player);
+        command.execute(playerName, game);
+        Mockito.verify(coreService).initNewGame(player);
     }
 
     @Test(expected = InputException.class)
     public void executeWithInputException() throws InputException {
-        Mockito.when(game.getCurrentNumberOfRolls()).thenReturn(Integer.MAX_VALUE);
         command.execute(null, game);
     }
 
     @Override
+    @Test
     public void isTrigger() {
         Assert.assertFalse(command.isTrigger("noTrigger"));
-        Assert.assertTrue(command.isTrigger("r"));
+        Assert.assertTrue(command.isTrigger("n"));
     }
 
     @Override
+    @Test
     public void retrieveInstructions() {
         Assert.assertNotNull(command.retrieveInstructions());
-    }
-
-    @Test
-    public void isRoll() {
-        Assert.assertTrue(command.isRoll());
     }
 }
