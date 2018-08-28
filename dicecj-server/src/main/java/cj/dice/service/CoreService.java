@@ -55,14 +55,6 @@ public class CoreService {
         return json != null ? json.toJson(new StartResponse("These commands are available", collectAvailableCommands())) : JSONB_ERROR;
     }
 
-    public String retrieveInstructions() {
-        StringBuilder stringBuilder = new StringBuilder("********\n")
-                .append("INPUT INSTRUCTIONS\n")
-                .append("--------\n");
-        inputCommands.forEach(c -> stringBuilder.append(c.retrieveInstructions() + "\n"));
-        return stringBuilder.append("********\n").toString();
-    }
-
     public String executeCommand(InputCommand inputCommand, String userInput, Game game) {
         try {
             String result = inputCommand.execute(userInput, game);

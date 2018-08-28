@@ -33,8 +33,7 @@ public class NewGameCommand extends InputCommand {
         }
         Player player = playerService.findOrCreatePlayer(userInput);
         Game newGame = coreService.initNewGame(player);
-        String result = coreService.retrieveInstructions();
-        return coreService.buildResult(newGame, result);
+        return coreService.buildResult(newGame, "new game created");
     }
 
     @Override

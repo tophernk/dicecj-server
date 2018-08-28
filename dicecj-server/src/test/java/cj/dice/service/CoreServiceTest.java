@@ -7,18 +7,16 @@ import cj.dice.entity.Scoreboard;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.json.bind.JsonbBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
@@ -40,13 +38,13 @@ public class CoreServiceTest extends MockitoTest {
 
     @Mock
     private Player player;
+    private Supplier<Stream<InputCommand>> streamSupplier;
 
     @Before
     public void mockCommands() {
-        List<InputCommand> inputCommandList = new ArrayList<>();
-        inputCommandList.add(new NewGameCommand());
-        inputCommandList.add(new RollDiceCommand());
-        Mockito.when(inputCommands.stream()).thenReturn(inputCommandList.stream());
+        InputCommand[] inputCommandArray = new InputCommand[] { new NewGameCommand(), new RollDiceCommand() };
+        streamSupplier = () -> Stream.of(inputCommandArray);
+        Mockito.when(inputCommands.stream()).thenReturn(streamSupplier.get());
     }
 
     @Test
@@ -86,26 +84,34 @@ public class CoreServiceTest extends MockitoTest {
     }
 
     @Test
-    public void retrieveInstructions() {
+    public void executeRollCommand() {
+        Game game = Mockito.mock(Game.class);
+        Mockito.when(game.getScoreboard()).thenReturn(Mockito.mock(Scoreboard.class));
+        Mockito.when(game.getCurrentNumberOfRolls()).thenReturn(0);
+        InputCommand command = Mockito.mock(InputCommand.class);
+        Mockito.when(command.isRoll()).thenReturn(true);
+        serviceUnderTest.executeCommand(command, "input", game);
+        Mockito.verify(game).setCurrentNumberOfRolls(1);
     }
 
     @Test
-    public void executeCommand() {
+    public void executeTurnEndCommand() {
+        Game game = Mockito.mock(Game.class);
+        Mockito.when(game.getScoreboard()).thenReturn(Mockito.mock(Scoreboard.class));
+        InputCommand command = Mockito.mock(InputCommand.class);
+        Mockito.when(command.isTurnEndCommand()).thenReturn(true);
+        serviceUnderTest.executeCommand(command, "input", game);
+        Mockito.verify(game).setCurrentNumberOfRolls(0);
     }
 
     @Test
     public void getFirstExecutableCommand() {
+        Optional<InputCommand> command = serviceUnderTest.getFirstExecutableCommand("noTrigger");
+        Assert.assertFalse(command.isPresent());
+        Stream<InputCommand> inputCommandStream = streamSupplier.get();
+        Mockito.when(inputCommands.stream()).thenReturn(inputCommandStream);
+        command = serviceUnderTest.getFirstExecutableCommand("r");
+        Assert.assertTrue(command.isPresent());
     }
 
-    @Test
-    public void buildResult() {
-    }
-
-    @Test
-    public void createJson() {
-    }
-
-    @Test
-    public void printDice() {
-    }
 }
