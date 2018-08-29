@@ -1,6 +1,6 @@
 package cj.dice.entity.score;
 
-import cj.dice.TestDiceUtil;
+import cj.dice.TestEntityFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,10 +12,10 @@ public class StraightTest {
 
         Straight straight = new Straight();
 
-        Assert.assertEquals(straightValue, straight.evaluate(TestDiceUtil.createDice(1, 2, 3, 4, 5)));
-        Assert.assertEquals(straightValue, straight.evaluate(TestDiceUtil.createDice(2, 3, 4, 5, 6)));
-        Assert.assertEquals(straightValue, straight.evaluate(TestDiceUtil.createDice(2, 4, 5, 3, 1)));
-        Assert.assertEquals(0, straight.evaluate(TestDiceUtil.createDice(4, 5, 4, 5, 1)));
+        Assert.assertEquals(straightValue, straight.evaluate(TestEntityFactory.createDice(1, 2, 3, 4, 5)));
+        Assert.assertEquals(straightValue, straight.evaluate(TestEntityFactory.createDice(2, 3, 4, 5, 6)));
+        Assert.assertEquals(straightValue, straight.evaluate(TestEntityFactory.createDice(2, 4, 5, 3, 1)));
+        Assert.assertEquals(0, straight.evaluate(TestEntityFactory.createDice(4, 5, 4, 5, 1)));
     }
 
     @Test
@@ -24,10 +24,10 @@ public class StraightTest {
 
         Straight straight = new SmallStraight();
 
-        Assert.assertEquals(straightValue, straight.evaluate(TestDiceUtil.createDice(1, 2, 3, 4, 6)));
-        Assert.assertEquals(straightValue, straight.evaluate(TestDiceUtil.createDice(2, 3, 4, 5, 5)));
-        Assert.assertEquals(straightValue, straight.evaluate(TestDiceUtil.createDice(2, 4, 5, 3, 2)));
-        Assert.assertEquals(0, straight.evaluate(TestDiceUtil.createDice(4, 5, 4, 5, 1)));
+        Assert.assertEquals(straightValue, straight.evaluate(TestEntityFactory.createDice(1, 2, 3, 4, 6)));
+        Assert.assertEquals(straightValue, straight.evaluate(TestEntityFactory.createDice(2, 3, 4, 5, 5)));
+        Assert.assertEquals(straightValue, straight.evaluate(TestEntityFactory.createDice(2, 4, 5, 3, 2)));
+        Assert.assertEquals(0, straight.evaluate(TestEntityFactory.createDice(4, 5, 4, 5, 1)));
     }
 
 }

@@ -1,6 +1,6 @@
 package cj.dice.entity.score;
 
-import cj.dice.TestDiceUtil;
+import cj.dice.TestEntityFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,8 +43,8 @@ public class FaceValueOfAKindScoreTest {
     }
 
     private void testFaceValue(Score score, final int scoreValue, int nonScoreValue) {
-        Assert.assertEquals(scoreValue * 1, score.evaluate(TestDiceUtil.createDice(scoreValue, nonScoreValue, nonScoreValue, nonScoreValue, nonScoreValue)));
-        Assert.assertEquals(scoreValue * 3, score.evaluate(TestDiceUtil.createDice(nonScoreValue, scoreValue, scoreValue, nonScoreValue, scoreValue)));
-        Assert.assertEquals(scoreValue * 0, score.evaluate(TestDiceUtil.createDice(nonScoreValue, nonScoreValue, nonScoreValue, nonScoreValue, nonScoreValue)));
+        Assert.assertEquals(scoreValue * 1, score.evaluate(TestEntityFactory.createDice(scoreValue, nonScoreValue, nonScoreValue, nonScoreValue, nonScoreValue)));
+        Assert.assertEquals(scoreValue * 3, score.evaluate(TestEntityFactory.createDice(nonScoreValue, scoreValue, scoreValue, nonScoreValue, scoreValue)));
+        Assert.assertEquals(scoreValue * 0, score.evaluate(TestEntityFactory.createDice(nonScoreValue, nonScoreValue, nonScoreValue, nonScoreValue, nonScoreValue)));
     }
 }
